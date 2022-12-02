@@ -9,7 +9,17 @@ export const URL_HASH_TAB = `__AGWE4H__HASH__TAG__PWHRG__`;
 // update-end--author:sunjianlei---date:20220408---for: 【VUEN-656】配置外部网址打不开，原因是带了#号，需要替换一下
 
 export const noop = () => {};
+import CryptoJS from 'crypto-js';
 
+export function aesEncrypt(word, keyWord = 'XwKsGlMcdPMEhR1B') {
+  const key = CryptoJS.enc.Utf8.parse(keyWord);
+  const srcs = CryptoJS.enc.Utf8.parse(word);
+  const encrypted = CryptoJS.AES.encrypt(srcs, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+  return encrypted.toString();
+}
 /**
  * @description:  Set ui mount node
  */
@@ -312,3 +322,103 @@ export function goJmReportViewPage(url, id, token) {
   url += `&token=${token}`
   window.open(url)
 }
+
+
+export function resetSize(vm) {
+  let img_width, img_height, bar_width, bar_height; //图片的宽度、高度，移动条的宽度、高度
+
+  const parentWidth = vm.$el.parentNode.offsetWidth;
+  const parentHeight = vm.$el.parentNode.offsetHeight;
+  if (vm.imgSize.width.indexOf('%') != -1) {
+    img_width = (parseInt(vm.imgSize.width) / 100) * parentWidth + 'px';
+  } else {
+    img_width = vm.imgSize.width;
+  }
+
+  if (vm.imgSize.height.indexOf('%') != -1) {
+    img_height = (parseInt(vm.imgSize.height) / 100) * parentHeight + 'px';
+  } else {
+    img_height = vm.imgSize.height;
+  }
+
+  if (vm.barSize.width.indexOf('%') != -1) {
+    bar_width = (parseInt(vm.barSize.width) / 100) * parentWidth + 'px';
+  } else {
+    bar_width = vm.barSize.width;
+  }
+
+  if (vm.barSize.height.indexOf('%') != -1) {
+    bar_height = (parseInt(vm.barSize.height) / 100) * parentHeight + 'px';
+  } else {
+    bar_height = vm.barSize.height;
+  }
+
+  return { imgWidth: img_width, imgHeight: img_height, barWidth: bar_width, barHeight: bar_height };
+}
+
+export const _code_chars = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z',
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+];
+export const _code_color1 = ['#fffff0', '#f0ffff', '#f0fff0', '#fff0f0'];
+export const _code_color2 = ['#FF0033', '#006699', '#993366', '#FF9900', '#66CC66', '#FF33CC'];
+

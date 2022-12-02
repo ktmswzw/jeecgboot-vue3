@@ -27,7 +27,6 @@
         </FormItem>
       </ACol>
     </ARow>
-
     <ARow class="enter-x">
       <ACol :span="12">
         <FormItem>
@@ -49,55 +48,41 @@
 
     <FormItem class="enter-x">
       <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
+        <!--<Button type="primary" size="large" block @click="validFormLogin" :loading="loading">-->
         {{ t('sys.login.loginButton') }}
       </Button>
-      <!-- <Button size="large" class="mt-4 enter-x" block @click="handleRegister">
-              {{ t('sys.login.registerButton') }}
-            </Button> -->
     </FormItem>
     <ARow class="enter-x">
-      <ACol :md="8" :xs="24">
+      <ACol :offset="0" :md="12" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
           {{ t('sys.login.mobileSignInFormTitle') }}
         </Button>
       </ACol>
-      <ACol :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
-        <Button block @click="setLoginState(LoginStateEnum.QR_CODE)">
-          {{ t('sys.login.qrSignInFormTitle') }}
-        </Button>
-      </ACol>
-      <ACol :md="7" :xs="24">
+      <ACol :offset="0" :md="12" :xs="24">
         <Button block @click="setLoginState(LoginStateEnum.REGISTER)">
           {{ t('sys.login.registerButton') }}
         </Button>
       </ACol>
     </ARow>
-
-    <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
-
-    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-      <a @click="onThirdLogin('github')" title="github"><GithubFilled /></a>
-      <a @click="onThirdLogin('wechat_enterprise')" title="企业微信"> <icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
-      <a @click="onThirdLogin('dingtalk')" title="钉钉"><DingtalkCircleFilled /></a>
-      <a @click="onThirdLogin('wechat_open')" title="微信"><WechatFilled /></a>
-    </div>
   </Form>
   <!-- 第三方登录相关弹框 -->
-  <ThirdModal ref="thirdModalRef"></ThirdModal>
+  <ThirdModal ref="thirdModalRef" />
+  <Verify mode="pop" :captchaType="captchaType" ref="verify" @success="handleLogin" />
 </template>
 <script lang="ts" setup>
   import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
 
-  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
-  import { GithubFilled, WechatFilled, DingtalkCircleFilled, createFromIconfontCN } from '@ant-design/icons-vue';
+  import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
+  import { createFromIconfontCN } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import ThirdModal from './ThirdModal.vue';
+  import Verify from './Verify.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { useUserStore } from '/@/store/modules/user';
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  // import { useDesign } from '/@/hooks/web/useDesign';
   import { getCodeInfo } from '/@/api/sys/user';
   //import { onKeyStroke } from '@vueuse/core';
 
@@ -105,12 +90,12 @@
   const ARow = Row;
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
-  const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
-  });
+  // const IconFont = createFromIconfontCN({
+  //   scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
+  // });
   const { t } = useI18n();
-  const { notification, createErrorModal } = useMessage();
-  const { prefixCls } = useDesign('login');
+  const { notification } = useMessage();
+  // const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
 
   const { setLoginState, getLoginState } = useLoginState();
@@ -132,12 +117,32 @@
     checkKey: null,
   });
 
+  console.log('00000');
   const { validForm } = useFormValid(formRef);
 
   //onKeyStroke('Enter', handleLogin);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
+  const verify = ref(null);
+  const captchaType = ref('');
+  const onShow = (type) => {
+    captchaType.value = type;
+    verify.value.show();
+  };
+  const handleSuccess = (res) => {
+    console.log(res);
+    console.log('sucess');
+  };
+
+  async function validFormLogin() {
+    const data = await validForm();
+    if (!data) return;
+    else {
+      onShow('clickWord');
+      // onShow('blockPuzzle');
+    }
+  }
   async function handleLogin() {
     const data = await validForm();
     if (!data) return;
@@ -172,6 +177,39 @@
       //update-end-author:taoyan date:2022-5-3 for: issues/41 登录页面，当输入验证码错误时，验证码图片要刷新一下，而不是保持旧的验证码图片不变
     }
   }
+  async function handleLogin2(captchaData) {
+    const data = await validForm();
+    if (!data) return;
+    try {
+      loading.value = true;
+      console.error('11111');
+      const { userInfo } = await userStore.login(
+        toRaw({
+          password: data.password,
+          username: data.account,
+          // captchaVerification: captchaData.captchaVerification,
+          captcha: data.inputCode,
+          checkKey: randCodeData.checkKey,
+          mode: 'none', //不要默认的错误提示
+        })
+      );
+      if (userInfo) {
+        notification.success({
+          message: t('sys.login.loginSuccessTitle'),
+          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realname}`,
+          duration: 3,
+        });
+      }
+    } catch (error) {
+      notification.error({
+        message: t('sys.api.errorTip'),
+        description: error.message || t('sys.api.networkExceptionMsg'),
+        duration: 3,
+      });
+      loading.value = false;
+    }
+  }
+
   function handleChangeCheckCode() {
     formData.inputCode = '';
     //TODO 兼容mock和接口，暂时这样处理

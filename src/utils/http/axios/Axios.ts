@@ -10,6 +10,7 @@ import { ContentTypeEnum } from '/@/enums/httpEnum';
 import { RequestEnum } from '/@/enums/httpEnum';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
+import {bool} from "vue-types";
 
 const { createMessage } = useMessage();
 export * from './axiosTransform';
@@ -23,6 +24,7 @@ export class VAxios {
 
   constructor(options: CreateAxiosOptions) {
     this.options = options;
+    axios.defaults.timeout = 1000 * 60;
     this.axiosInstance = axios.create(options);
     this.setupInterceptors();
   }
@@ -151,6 +153,7 @@ export class VAxios {
         },
       })
       .then((res: any) => {
+        console.log(res);
         //--@updateBy-begin----author:liusq---date:20210914------for:上传判断是否包含回调方法------
         if (callback?.success && isFunction(callback?.success)) {
           callback?.success(res?.data);
@@ -215,12 +218,18 @@ export class VAxios {
     conf.requestOptions = opt;
 
     conf = this.supportFormData(conf);
-
+    const whiteList: string[] = ['captcha'];
     return new Promise((resolve, reject) => {
       this.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
-          if (transformRequestHook && isFunction(transformRequestHook)) {
+          let whiteFlag = false;
+          for (const url in whiteList) {
+            if (conf.url?.indexOf(url) !== -1) {
+              whiteFlag = true;
+            }
+          }
+          if (whiteFlag && transformRequestHook && isFunction(transformRequestHook)) {
             try {
               const ret = transformRequestHook(res, opt);
               //zhangyafei---添加回调方法

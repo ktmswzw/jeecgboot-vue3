@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
+import { LoginParams, LoginResultModel, GetUserInfoModel, CaptchaType, CaptchaTypeRep } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 import { useMessage } from '/@/hooks/web/useMessage';
@@ -22,6 +22,8 @@ enum Api {
   GetPermCode = '/sys/permission/getPermCode',
   //新加的获取图形验证码的接口
   getInputCode = '/sys/randomImage',
+  getImageClickCaptcha = '/captcha/get',
+  checkImageClickCaptcha = '/captcha/check',
   //获取短信验证码的接口
   getCaptcha = '/sys/sms',
   //注册接口
@@ -194,4 +196,23 @@ export function getQrcodeToken(params) {
 export async function validateCasLogin(params) {
   let url = Api.validateCasLogin;
   return defHttp.get({ url: url, params });
+}
+
+export function getImageClickCaptcha(params: CaptchaType) {
+  return defHttp.post({
+    url: Api.getImageClickCaptcha,
+    params,
+  });
+}
+
+export function checkImageClickCaptcha(params: CaptchaType, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<CaptchaTypeRep>(
+    {
+      url: Api.checkImageClickCaptcha,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    }
+  );
 }
