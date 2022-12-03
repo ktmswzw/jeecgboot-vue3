@@ -89,6 +89,11 @@ export const dictItemColumns: BasicColumn[] = [
     width: 80,
   },
   {
+    title: '描述',
+    dataIndex: 'description',
+    width: 200,
+  },
+  {
     title: '数据值',
     dataIndex: 'itemValue',
     width: 80,
