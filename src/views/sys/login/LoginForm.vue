@@ -8,25 +8,6 @@
       <InputPassword size="large" visibilityToggle v-model:value="formData.password" :placeholder="t('sys.login.password')" />
     </FormItem>
 
-    <!--验证码-->
-    <ARow class="enter-x">
-      <ACol :span="12">
-        <FormItem name="inputCode" class="enter-x">
-          <Input size="large" v-model:value="formData.inputCode" :placeholder="t('sys.login.inputCode')" style="min-width: 100px" />
-        </FormItem>
-      </ACol>
-      <ACol :span="8">
-        <FormItem :style="{ 'text-align': 'right', 'margin-left': '20px' }" class="enter-x">
-          <img
-            v-if="randCodeData.requestCodeSuccess"
-            style="margin-top: 2px; max-width: initial"
-            :src="randCodeData.randCodeImage"
-            @click="handleChangeCheckCode"
-          />
-          <img v-else style="margin-top: 2px; max-width: initial" src="../../../assets/images/checkcode.png" @click="handleChangeCheckCode" />
-        </FormItem>
-      </ACol>
-    </ARow>
     <ARow class="enter-x">
       <ACol :span="12">
         <FormItem>
@@ -47,8 +28,7 @@
     </ARow>
 
     <FormItem class="enter-x">
-      <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
-        <!--<Button type="primary" size="large" block @click="validFormLogin" :loading="loading">-->
+      <Button type="primary" size="large" block @click="validFormLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
       </Button>
     </FormItem>
@@ -117,7 +97,6 @@
     checkKey: null,
   });
 
-  console.log('00000');
   const { validForm } = useFormValid(formRef);
 
   //onKeyStroke('Enter', handleLogin);
@@ -143,7 +122,7 @@
       // onShow('blockPuzzle');
     }
   }
-  async function handleLogin() {
+  async function handleLogin(captchaData) {
     const data = await validForm();
     if (!data) return;
     try {
@@ -152,43 +131,8 @@
         toRaw({
           password: data.password,
           username: data.account,
-          captcha: data.inputCode,
-          checkKey: randCodeData.checkKey,
-          mode: 'none', //不要默认的错误提示
-        })
-      );
-      if (userInfo) {
-        notification.success({
-          message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realname}`,
-          duration: 3,
-        });
-      }
-    } catch (error) {
-      notification.error({
-        message: t('sys.api.errorTip'),
-        description: error.message || t('sys.api.networkExceptionMsg'),
-        duration: 3,
-      });
-      loading.value = false;
-
-      //update-begin-author:taoyan date:2022-5-3 for: issues/41 登录页面，当输入验证码错误时，验证码图片要刷新一下，而不是保持旧的验证码图片不变
-      handleChangeCheckCode();
-      //update-end-author:taoyan date:2022-5-3 for: issues/41 登录页面，当输入验证码错误时，验证码图片要刷新一下，而不是保持旧的验证码图片不变
-    }
-  }
-  async function handleLogin2(captchaData) {
-    const data = await validForm();
-    if (!data) return;
-    try {
-      loading.value = true;
-      console.error('11111');
-      const { userInfo } = await userStore.login(
-        toRaw({
-          password: data.password,
-          username: data.account,
-          // captchaVerification: captchaData.captchaVerification,
-          captcha: data.inputCode,
+          captchaVerification: captchaData.captchaVerification,
+          // captcha: data.inputCode,
           checkKey: randCodeData.checkKey,
           mode: 'none', //不要默认的错误提示
         })

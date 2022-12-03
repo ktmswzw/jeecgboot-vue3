@@ -223,10 +223,10 @@ export class VAxios {
       this.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
-          let whiteFlag = false;
-          for (const url in whiteList) {
+          let whiteFlag = true;
+          for (const url of whiteList) {
             if (conf.url?.indexOf(url) !== -1) {
-              whiteFlag = true;
+              whiteFlag = false;
             }
           }
           if (whiteFlag && transformRequestHook && isFunction(transformRequestHook)) {
