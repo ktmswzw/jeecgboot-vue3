@@ -24,8 +24,9 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '连续性',
-    align: 'center',
     dataIndex: 'continuity',
+    slots: { customRender: 'continuity' },
+    width: 200,
   },
 ];
 //查询数据
