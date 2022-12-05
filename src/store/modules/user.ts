@@ -5,9 +5,9 @@ import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID } from '/@/enums/cacheEnum';
-import { getAuthCache, setAuthCache, removeAuthCache } from '/@/utils/auth';
+import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, ThirdLoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
+import { doLogout, loginApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -152,7 +152,7 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean, data?: any): Promise<any | null> {
       if (!this.getToken) return null;
       //获取用户信息
-      const userInfo = await this.getUserInfoAction();
+      const userInfo = await this.getUserInfoAction(data.userInfo, data.sysAllDictItems);
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -198,11 +198,11 @@ export const useUserStore = defineStore({
     /**
      * 获取用户信息
      */
-    async getUserInfoAction(): Promise<UserInfo | null> {
+    async getUserInfoAction(userInfo, sysAllDictItems): Promise<UserInfo | null> {
       if (!this.getToken) {
         return null;
       }
-      const { userInfo, sysAllDictItems } = await getUserInfo();
+      // const { userInfo, sysAllDictItems } = await getUserInfo();
       if (userInfo) {
         const { roles = [] } = userInfo;
         if (isArray(roles)) {

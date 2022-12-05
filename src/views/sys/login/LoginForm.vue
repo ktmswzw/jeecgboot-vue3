@@ -87,8 +87,8 @@
   const rememberMe = ref(false);
 
   const formData = reactive({
-    account: 'admin',
-    password: '123456',
+    account: '',
+    password: '',
     inputCode: '',
   });
   const randCodeData = reactive({
@@ -137,6 +137,7 @@
           mode: 'none', //不要默认的错误提示
         })
       );
+      console.error(1);
       if (userInfo) {
         notification.success({
           message: t('sys.login.loginSuccessTitle'),

@@ -345,6 +345,21 @@ export const formPasswordSchema: FormSchema[] = [
   },
 ];
 
+export const formClientSchema: FormSchema[] = [
+  {
+    label: '用户账号',
+    field: 'username',
+    component: 'Input',
+    componentProps: { readOnly: true },
+  },
+  {
+    label: '推送ID',
+    field: 'clientId',
+    component: 'Input',
+    componentProps: { readOnly: false },
+  },
+];
+
 export const formAgentSchema: FormSchema[] = [
   {
     label: '',

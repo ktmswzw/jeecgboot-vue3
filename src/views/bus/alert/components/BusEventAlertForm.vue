@@ -4,22 +4,22 @@
       <a-row>
         <a-col :span="24">
           <a-form-item label="预警名称" v-bind="validateInfos.name">
-            <a-input v-model:value="formData.name" placeholder="请输入预警名称" :disabled="disabled"></a-input>
+            <a-input v-model:value="formData.name" placeholder="请输入预警名称" :disabled="disabled" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
           <a-form-item label="预警类型" v-bind="validateInfos.type">
-	          <j-dict-select-tag v-model:value="formData.type" dictCode="alert_type" placeholder="请选择预警类型" :disabled="disabled"/>
+            <j-dict-select-tag v-model:value="formData.type" dictCode="alert_type" placeholder="请选择预警类型" :disabled="disabled" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
           <a-form-item label="状态" v-bind="validateInfos.status">
-	          <j-dict-select-tag v-model:value="formData.status" dictCode="status" placeholder="请选择状态" :disabled="disabled"/>
+            <j-dict-select-tag v-model:value="formData.status" dictCode="status" placeholder="请选择状态" :disabled="disabled" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
           <a-form-item label="紧急程度" v-bind="validateInfos.urgentLevel">
-	          <j-dict-select-tag v-model:value="formData.urgentLevel" dictCode="urgent_level" placeholder="请选择紧急程度" :disabled="disabled"/>
+            <j-dict-select-tag v-model:value="formData.urgentLevel" dictCode="urgent_level" placeholder="请选择紧急程度" :disabled="disabled" />
           </a-form-item>
         </a-col>
       </a-row>
@@ -31,12 +31,11 @@
   import { ref, reactive, defineExpose, nextTick, defineProps, computed } from 'vue';
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import moment from 'moment';
   import JDictSelectTag from '/@/components/Form/src/jeecg/components/JDictSelectTag.vue';
   import { getValueType } from '/@/utils';
   import { saveOrUpdate } from '../BusEventAlert.api';
   import { Form } from 'ant-design-vue';
-  
+
   const props = defineProps({
     disabled: { type: Boolean, default: false },
   });
@@ -44,20 +43,19 @@
   const useForm = Form.useForm;
   const emit = defineEmits(['register', 'ok']);
   const formData = reactive<Record<string, any>>({
-    name: '',   
-    type: '',   
-    status: '',   
-    urgentLevel: '',   
+    name: '',
+    type: '',
+    status: '',
+    urgentLevel: '',
   });
   const { createMessage } = useMessage();
   const labelCol = ref<any>({ xs: { span: 24 }, sm: { span: 5 } });
   const wrapperCol = ref<any>({ xs: { span: 24 }, sm: { span: 16 } });
   const confirmLoading = ref<boolean>(false);
   //表单验证
-  const validatorRules = {
-  };
+  const validatorRules = {};
   const { resetFields, validate, validateInfos } = useForm(formData, validatorRules, { immediate: true });
-  
+
   /**
    * 新增
    */
@@ -113,7 +111,6 @@
         confirmLoading.value = false;
       });
   }
-
 
   defineExpose({
     add,

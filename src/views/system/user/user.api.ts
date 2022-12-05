@@ -21,6 +21,7 @@ enum Api {
   allPostList = '/sys/position/list',
   userDepartList = '/sys/user/userDepartList',
   changePassword = '/sys/user/changePassword',
+  savePusherClientId = '/sys/user/savePusherClientId',
   frozenBatch = '/sys/user/frozenBatch',
   getUserAgent = '/sys/sysUserAgent/queryByUserName',
   syncUser = '/act/process/extActProcess/doSyncUser',
@@ -165,3 +166,10 @@ export const saveOrUpdateAgent = (params) => {
  * @param params
  */
 export const syncUser = () => defHttp.put({ url: Api.syncUser });
+/**
+ * 推送ID
+ * @param params
+ */
+export const savePusherClientId = (params) => {
+  return defHttp.post({ url: Api.savePusherClientId, params });
+};

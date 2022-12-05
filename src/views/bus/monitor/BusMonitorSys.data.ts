@@ -3,14 +3,14 @@ import { FormSchema } from '/@/components/Table';
 //列表数据
 export const columns: BasicColumn[] = [
   {
-    title: '系统来源',
+    title: '系统来源L',
     align: 'center',
     dataIndex: 'source_dictText',
   },
   {
-    title: '日期时间',
+    title: '系统来源',
     align: 'center',
-    dataIndex: 'createTime',
+    dataIndex: 'source',
   },
   {
     title: '系统IP',
@@ -18,15 +18,20 @@ export const columns: BasicColumn[] = [
     dataIndex: 'ip',
   },
   {
-    title: '监控类型',
+    title: '监控类型L',
     align: 'center',
     dataIndex: 'msgType_dictText',
   },
   {
-    title: '连续性',
+    title: '监控类型',
+    align: 'center',
+    dataIndex: 'msgType',
+  },
+  {
+    title: '间隔分钟',
+    align: 'center',
     dataIndex: 'continuity',
     slots: { customRender: 'continuity' },
-    width: 200,
   },
 ];
 //查询数据
@@ -50,6 +55,7 @@ export const searchFormSchema: FormSchema[] = [
     colProps: { span: 6 },
   },
 ];
+
 //表单数据
 export const formSchema: FormSchema[] = [
   {
@@ -74,7 +80,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '连续性',
+    label: '间隔分钟',
     field: 'continuity',
     component: 'InputNumber',
   },
@@ -87,11 +93,36 @@ export const formSchema: FormSchema[] = [
   },
 ];
 
-/**
- * 流程表单调用这个方法获取formSchema
- * @param param
- */
-export function getBpmFormSchema(_formData): FormSchema[] {
-  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
-  return formSchema;
-}
+//子表列表数据
+export const busMonitorLogColumns: BasicColumn[] = [
+  {
+    title: 'ID',
+    align: 'center',
+    dataIndex: 'id',
+  },
+  {
+    title: '主键',
+    align: 'center',
+    dataIndex: 'configId',
+  },
+  {
+    title: '时间',
+    align: 'center',
+    dataIndex: 'createTime',
+  },
+];
+//子表表单数据
+export const busMonitorLogFormSchema: FormSchema[] = [
+  // TODO 子表隐藏字段，目前写死为ID
+  {
+    label: '',
+    field: 'id',
+    component: 'Input',
+    show: false,
+  },
+  {
+    label: '主键',
+    field: 'configId',
+    component: 'Input',
+  },
+];

@@ -1,13 +1,21 @@
 <template>
-  <a-modal :title="title" :width="width" :visible="visible" @ok="handleOk" :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }" @cancel="handleCancel" cancelText="关闭">
-    <BusEventAlertForm ref="registerForm" @ok="submitCallback" :disabled="disableSubmit"></BusEventAlertForm>
+  <a-modal
+    :title="title"
+    :width="width"
+    :visible="visible"
+    @ok="handleOk"
+    :okButtonProps="{ class: { 'jee-hidden': disableSubmit } }"
+    @cancel="handleCancel"
+    cancelText="关闭"
+  >
+    <BusEventAlertForm ref="registerForm" @ok="submitCallback" :disabled="disableSubmit" />
   </a-modal>
 </template>
 
 <script lang="ts" setup>
   import { ref, nextTick, defineExpose } from 'vue';
-  import BusEventAlertForm from './BusEventAlertForm.vue'
-  
+  import BusEventAlertForm from './BusEventAlertForm.vue';
+
   const title = ref<string>('');
   const width = ref<number>(800);
   const visible = ref<boolean>(false);
@@ -25,7 +33,7 @@
       registerForm.value.add();
     });
   }
-  
+
   /**
    * 编辑
    * @param record
@@ -37,7 +45,7 @@
       registerForm.value.edit(record);
     });
   }
-  
+
   /**
    * 确定按钮点击事件
    */

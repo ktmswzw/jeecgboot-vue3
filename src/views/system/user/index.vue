@@ -42,6 +42,7 @@
     <UserDrawer @register="registerDrawer" @success="handleSuccess" />
     <!--修改密码-->
     <PasswordModal @register="registerPasswordModal" @success="reload" />
+    <ClientPushIdModal @register="registerPushModal" @success="reload" />
     <!--用户代理-->
     <UserAgentModal @register="registerAgentModal" @success="reload" />
     <!--回收站-->
@@ -51,11 +52,12 @@
 
 <script lang="ts" name="system-user" setup>
   //ts语法
-  import { ref, computed, unref } from 'vue';
+  import { unref } from 'vue';
   import { BasicTable, TableAction, ActionItem } from '/@/components/Table';
   import UserDrawer from './UserDrawer.vue';
   import UserRecycleBinModal from './UserRecycleBinModal.vue';
   import PasswordModal from './PasswordModal.vue';
+  import ClientPushIdModal from './ClientPushId.vue';
   import UserAgentModal from './UserAgentModal.vue';
   import JThirdAppButton from '/@/components/jeecg/thirdApp/JThirdAppButton.vue';
   import { useDrawer } from '/@/components/Drawer';
@@ -77,6 +79,8 @@
   const [registerPasswordModal, { openModal: openPasswordModal }] = useModal();
   //代理人model
   const [registerAgentModal, { openModal: openAgentModal }] = useModal();
+  //推送ID
+  const [registerPushModal, { openModal: openPushModal }] = useModal();
 
   // 列表页面公共参数、方法
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
@@ -176,6 +180,12 @@
     openPasswordModal(true, { username });
   }
   /**
+   * 打开修改推送弹窗
+   */
+  function handleOpenPushModal(record) {
+    openPushModal(true, { username: record.username, clientId: record.clientId });
+  }
+  /**
    * 打开代理人弹窗
    */
   function handleAgentSettings(userName) {
@@ -250,6 +260,10 @@
       {
         label: '密码',
         onClick: handleChangePassword.bind(null, record.username),
+      },
+      {
+        label: '推送',
+        onClick: handleOpenPushModal.bind(null, record),
       },
       {
         label: '删除',

@@ -39,43 +39,53 @@
         <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download-outlined" size="small" @click="downloadFile(text)">下载</a-button>
       </template>
       <template #continuity="{ text }">
-        <a-tag color="pink" v-if="text == 0">禁用</a-tag>
-        <a-tag color="#87d068" v-if="text == 1">正常</a-tag>
+        <a-tag color="#87d068">{{ text }}</a-tag>
       </template>
     </BasicTable>
+    <!--子表表格tab-->
+    <a-tabs defaultActiveKey="1">
+      <a-tab-pane tab="健康监控" key="1">
+        <BusMonitorLogList />
+      </a-tab-pane>
+    </a-tabs>
     <!-- 表单区域 -->
     <BusMonitorSysModal @register="registerModal" @success="handleSuccess" />
   </div>
 </template>
 
 <script lang="ts" name="monitor-busMonitorSys" setup>
-  import { BasicTable, TableAction } from '/@/components/Table';
-  import { useModal } from '/@/components/Modal';
+  import { ref, computed, unref, provide } from 'vue';
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
+  import { useModal } from '/@/components/Modal';
   import BusMonitorSysModal from './components/BusMonitorSysModal.vue';
+  import BusMonitorLogList from './BusMonitorLogList.vue';
   import { columns, searchFormSchema } from './BusMonitorSys.data';
   import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from './BusMonitorSys.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   //注册model
   const [registerModal, { openModal }] = useModal();
   //注册table数据
-  const { tableContext, onExportXls, onImportXls } = useListPage({
+  const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     tableProps: {
       title: '健康监控',
       api: list,
       columns,
       canResize: false,
+      rowSelection: { type: 'radio' },
       formConfig: {
-        //labelWidth: 120,
         schemas: searchFormSchema,
-        autoSubmitOnEnter: true,
-        showAdvancedButton: true,
         fieldMapToNumber: [],
         fieldMapToTime: [],
       },
       actionColumn: {
         width: 120,
         fixed: 'right',
+      },
+      pagination: {
+        current: 1,
+        pageSize: 5,
+        pageSizeOptions: ['5', '10', '20'],
       },
     },
     exportConfig: {
@@ -90,6 +100,9 @@
 
   const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
 
+  const mainId = computed(() => (unref(selectedRowKeys).length > 0 ? unref(selectedRowKeys)[0] : ''));
+  //下发 mainId,子组件接收
+  provide('mainId', mainId);
   /**
    * 新增事件
    */
@@ -148,6 +161,7 @@
       },
     ];
   }
+
   /**
    * 下拉操作栏
    */
