@@ -28,7 +28,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'msgType',
   },
   {
-    title: '间隔分钟',
+    title: '计数次数',
     align: 'center',
     dataIndex: 'continuity',
     slots: { customRender: 'continuity' },
@@ -80,7 +80,7 @@ export const formSchema: FormSchema[] = [
     },
   },
   {
-    label: '间隔分钟',
+    label: '计数次数',
     field: 'continuity',
     component: 'InputNumber',
   },
@@ -106,6 +106,12 @@ export const busMonitorLogColumns: BasicColumn[] = [
     dataIndex: 'configId',
   },
   {
+    title: '状态',
+    align: 'center',
+    dataIndex: 'flag',
+    slots: { customRender: 'flag' },
+  },
+  {
     title: '时间',
     align: 'center',
     dataIndex: 'createTime',
@@ -124,5 +130,10 @@ export const busMonitorLogFormSchema: FormSchema[] = [
     label: '主键',
     field: 'configId',
     component: 'Input',
+  },
+  {
+    label: '状态',
+    field: 'configId',
+    component: 'InputNumber',
   },
 ];

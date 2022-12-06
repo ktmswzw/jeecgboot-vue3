@@ -53,7 +53,7 @@
   import { reactive, ref, toRaw, unref, computed, onMounted } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
-  import { createFromIconfontCN } from '@ant-design/icons-vue';
+  //  import { createFromIconfontCN } from '@ant-design/icons-vue';
   import LoginFormTitle from './LoginFormTitle.vue';
   import ThirdModal from './ThirdModal.vue';
   import Verify from './Verify.vue';
@@ -70,9 +70,9 @@
   const ARow = Row;
   const FormItem = Form.Item;
   const InputPassword = Input.Password;
-  // const IconFont = createFromIconfontCN({
-  //   scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
-  // });
+  //  const IconFont = createFromIconfontCN({
+  //    scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
+  //  });
   const { t } = useI18n();
   const { notification } = useMessage();
   // const { prefixCls } = useDesign('login');
@@ -109,11 +109,6 @@
     captchaType.value = type;
     verify.value.show();
   };
-  const handleSuccess = (res) => {
-    console.log(res);
-    console.log('sucess');
-  };
-
   async function validFormLogin() {
     const data = await validForm();
     if (!data) return;
@@ -165,13 +160,6 @@
     });
   }
 
-  /**
-   * 第三方登录
-   * @param type
-   */
-  function onThirdLogin(type) {
-    thirdModalRef.value.onThirdLogin(type);
-  }
   //初始化验证码
   onMounted(() => {
     handleChangeCheckCode();

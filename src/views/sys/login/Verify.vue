@@ -1,9 +1,6 @@
 <template>
   <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
-    <div
-      :class="mode === 'pop' ? 'verifybox' : ''"
-      :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }"
-    >
+    <div :class="mode === 'pop' ? 'verifybox' : ''" :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }">
       <div class="verifybox-top" v-if="mode === 'pop'">
         请完成安全验证
         <span class="verifybox-close" @click="closeBox">
@@ -92,7 +89,7 @@
       const instance = ref({});
 
       const showBox = computed(() => {
-        if (mode.value == 'pop') {
+        if (mode.value === 'pop') {
           return clickShow.value;
         } else {
           return true;
@@ -113,7 +110,7 @@
         refresh();
       };
       const show = () => {
-        if (mode.value == 'pop') {
+        if (mode.value === 'pop') {
           clickShow.value = true;
         }
       };

@@ -146,7 +146,7 @@
       const canvas = ref(null);
       const canvasClick = (e) => {
         checkPosArr.push(getMousePos(canvas, e));
-        if (num.value == checkNum.value) {
+        if (num.value === checkNum.value) {
           num.value = createPoint(getMousePos(canvas, e));
           //按比例转换坐标值
           let arr = pointTransfrom(checkPosArr, setSize);
@@ -156,14 +156,12 @@
           setTimeout(() => {
             // var flag = this.comparePos(this.fontPos, this.checkPosArr);
             //发送后端请求
-            var captchaVerification = secretKey.value
+            let captchaVerification = secretKey.value
               ? aesEncrypt(backToken.value + '---' + JSON.stringify(checkPosArr), secretKey.value)
               : backToken.value + '---' + JSON.stringify(checkPosArr);
             let data = {
               captchaType: captchaType.value,
-              pointJson: secretKey.value
-                ? aesEncrypt(JSON.stringify(checkPosArr), secretKey.value)
-                : JSON.stringify(checkPosArr),
+              pointJson: secretKey.value ? aesEncrypt(JSON.stringify(checkPosArr), secretKey.value) : JSON.stringify(checkPosArr),
               token: backToken.value,
             };
             checkImageClickCaptcha(data).then((result) => {
@@ -198,8 +196,8 @@
       };
       //获取坐标
       const getMousePos = function (obj, e) {
-        var x = e.offsetX;
-        var y = e.offsetY;
+        let x = e.offsetX;
+        let y = e.offsetY;
         return { x, y };
       };
       //创建坐标点
@@ -241,12 +239,11 @@
 
       //坐标转换函数
       const pointTransfrom = function (pointArr, imgSize) {
-        var newPointArr = pointArr.map((p) => {
+        return pointArr.map((p) => {
           let x = Math.round((310 * p.x) / parseInt(imgSize.imgWidth));
           let y = Math.round((155 * p.y) / parseInt(imgSize.imgHeight));
           return { x, y };
         });
-        return newPointArr;
       };
       return {
         secretKey,
