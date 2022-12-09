@@ -13,6 +13,7 @@
   import { ref } from 'vue';
   import GrowCard from '../components/GrowCard.vue';
   import SiteAnalysis from '../components/SiteAnalysis.vue';
+  import MonitorAnalysis from '../components/MonitorAnalysis.vue';
   import VisitSource from '../components/VisitSource.vue';
   import VisitRadar from '../components/VisitRadar.vue';
   import SalesProductPie from '../components/SalesProductPie.vue';
