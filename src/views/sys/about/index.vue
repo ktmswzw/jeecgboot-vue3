@@ -2,10 +2,7 @@
   <PageWrapper title="关于">
     <template #headerContent>
       <div class="flex justify-between items-center">
-        <span class="flex-1">
-          基于Vue3.0、Vite、 Ant-Design-Vue 、TypeScript
-          的后台解决方案
-        </span>
+        <span class="flex-1"> 基于Vue3.0、Vite、 Ant-Design-Vue 、TypeScript 的后台解决方案 </span>
       </div>
     </template>
     <Description @register="register" class="my-4 enter-y" />

@@ -72,7 +72,7 @@
         datetime1,
         datetime2,
         datetime3,
-        reload
+        reload,
       };
     },
   };
@@ -87,7 +87,7 @@
     }
   }
   //antd3升级后，表单右侧讨论样式调整
-  :deep(.ant-tabs-top  .ant-tabs-nav, .ant-tabs-bottom  .ant-tabs-nav, .ant-tabs-top  div  .ant-tabs-nav, .ant-tabs-bottom  div  .ant-tabs-nav) {
+  :deep(.ant-tabs-top .ant-tabs-nav, .ant-tabs-bottom .ant-tabs-nav, .ant-tabs-top div .ant-tabs-nav, .ant-tabs-bottom div .ant-tabs-nav) {
     margin: 0 16px 0;
   }
 </style>

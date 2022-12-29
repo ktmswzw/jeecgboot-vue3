@@ -144,7 +144,7 @@
       const table = useTableContext();
       const popoverVisible = ref(true);
       // update-begin--author:sunjianlei---date:20221101---for: 修复第一次进入时列表配置不能拖拽
-      nextTick(() => popoverVisible.value = false);
+      nextTick(() => (popoverVisible.value = false));
       // update-end--author:sunjianlei---date:20221101---for: 修复第一次进入时列表配置不能拖拽
       const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys');
       let inited = false;

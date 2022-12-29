@@ -28,7 +28,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useLockStore } from '/@/store/modules/lock';
   import headerImg from '/@/assets/images/header.jpg';
-  import {getFileAccessHttpUrl} from "/@/utils/common/compUtils";
+  import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
   export default defineComponent({
     name: 'LockModal',
     components: { BasicModal, BasicForm },

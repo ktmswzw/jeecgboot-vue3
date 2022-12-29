@@ -45,7 +45,11 @@
               'background-size': setSize.imgWidth + ' ' + setSize.imgHeight,
             }"
           >
-            <img :src="'data:image/png;base64,' + blockBackImgBase" alt="" style="width: 100%; height: 100%; display: block; -webkit-user-drag: none" />
+            <img
+              :src="'data:image/png;base64,' + blockBackImgBase"
+              alt=""
+              style="width: 100%; height: 100%; display: block; -webkit-user-drag: none"
+            />
           </div>
         </div>
       </div>
@@ -258,7 +262,9 @@
           moveLeftDistance = (moveLeftDistance * 310) / parseInt(setSize.imgWidth);
           let data = {
             captchaType: captchaType.value,
-            pointJson: secretKey.value ? aesEncrypt(JSON.stringify({ x: moveLeftDistance, y: 5.0 }), secretKey.value) : JSON.stringify({ x: moveLeftDistance, y: 5.0 }),
+            pointJson: secretKey.value
+              ? aesEncrypt(JSON.stringify({ x: moveLeftDistance, y: 5.0 }), secretKey.value)
+              : JSON.stringify({ x: moveLeftDistance, y: 5.0 }),
             token: backToken.value,
           };
           checkImageClickCaptcha(data).then((result) => {

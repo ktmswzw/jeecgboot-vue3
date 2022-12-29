@@ -10,7 +10,7 @@
             v-bind="getAttr(item.event)"
             @click="handleClickMenu(item)"
             :disabled="item.disabled"
-            :class="[{ 'is-pop-confirm': item.popConfirm }, (item.class ?? [])]"
+            :class="[{ 'is-pop-confirm': item.popConfirm }, item.class ?? []]"
           >
             <a-popconfirm v-if="popconfirm && item.popConfirm" v-bind="getPopConfirmAttrs(item.popConfirm)">
               <template #icon v-if="item.popConfirm.icon">

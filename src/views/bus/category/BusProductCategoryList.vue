@@ -3,7 +3,13 @@
     <!--引用表格-->
     <a-row>
       <a-col :span="8">
-        <BasicTable @register="registerTable" :rowSelection="rowSelection" :expandedRowKeys="expandedRowKeys" @expand="handleExpand" @fetch-success="onFetchSuccess">
+        <BasicTable
+          @register="registerTable"
+          :rowSelection="rowSelection"
+          :expandedRowKeys="expandedRowKeys"
+          @expand="handleExpand"
+          @fetch-success="onFetchSuccess"
+        >
           <!--插槽:table标题-->
           <template #tableTitle>
             <a-button type="primary" @click="handleCreate" preIcon="ant-design:plus-outlined"> 新增</a-button>
@@ -36,7 +42,9 @@
           </template>
           <template #fileSlot="{ text }">
             <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
-            <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download-outlined" size="small" @click="downloadFile(text)">下载</a-button>
+            <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download-outlined" size="small" @click="downloadFile(text)"
+              >下载</a-button
+            >
           </template>
         </BasicTable>
       </a-col>
@@ -57,8 +65,16 @@
   import BusProductCategoryModal from './components/BusProductCategoryModal.vue';
   import { columns, searchFormSchema } from './BusProductCategory.data';
   import { downloadFile } from '/@/utils/common/renderUtils';
-  import { list, deleteBusProductCategory, batchDeleteBusProductCategory, getExportUrl, getImportUrl, getChildList, getChildListBatch } from './BusProductCategory.api';
-  import BusProductList from "/@/views/bus/product/BusProductList.vue";
+  import {
+    list,
+    deleteBusProductCategory,
+    batchDeleteBusProductCategory,
+    getExportUrl,
+    getImportUrl,
+    getChildList,
+    getChildListBatch,
+  } from './BusProductCategory.api';
+  import BusProductList from '/@/views/bus/product/BusProductList.vue';
   const expandedRowKeys = ref([]);
   const searchInfo = {};
   //字典model
@@ -95,7 +111,8 @@
     },
   });
 
-  const [registerTable, { reload, collapseAll, updateTableDataRecord, findTableDataRecord, getDataSource }, { rowSelection, selectedRowKeys }] = tableContext;
+  const [registerTable, { reload, collapseAll, updateTableDataRecord, findTableDataRecord, getDataSource }, { rowSelection, selectedRowKeys }] =
+    tableContext;
 
   /**
    * 新增事件

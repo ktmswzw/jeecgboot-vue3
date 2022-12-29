@@ -49,7 +49,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useLocaleStore } from '/@/store/modules/locale';
-  import { useLoginState, LoginStateEnum } from './useLogin';
+  import { useLoginState } from './useLogin';
   defineProps({
     sessionTimeout: {
       type: Boolean,
@@ -121,7 +121,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      margin-left: -48%;
+      margin-left: -50%;
       background-image: url(/@/assets/svg/login-bg.svg);
       background-position: 100%;
       background-repeat: no-repeat;

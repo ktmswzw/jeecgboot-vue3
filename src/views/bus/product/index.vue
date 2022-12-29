@@ -2,7 +2,16 @@
   <a-row :class="['p-4', `${prefixCls}--box`]" :gutter="10">
     <a-col :xl="6" :lg="8" :md="10" :sm="24" style="flex: 1">
       <a-card :bordered="false" style="height: 100%">
-        <BasicTree @select="onTreeSelect" class="w-1/3" title="搜索" toolbar checkable search :treeData="treeData" :beforeRightClick="getRightMenuList" />
+        <BasicTree
+          @select="onTreeSelect"
+          class="w-1/3"
+          title="搜索"
+          toolbar
+          checkable
+          search
+          :treeData="treeData"
+          :beforeRightClick="getRightMenuList"
+        />
       </a-card>
     </a-col>
   </a-row>
