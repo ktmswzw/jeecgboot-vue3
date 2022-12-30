@@ -23,7 +23,7 @@
   import { watch, reactive, toRaw } from 'vue';
   import type { PropType } from 'vue';
   import { Form, FormItem, Input } from 'ant-design-vue';
-  import { AnYiExtendProperty } from '../../../../src/types/modeler.d';
+  import { AnYiExtendProperty } from 'anyi-process-ee-antvue/types/modeler';
   const TextArea = Input.TextArea;
   const emit = defineEmits(['change']);
   const data = reactive<AnYiExtendProperty>({} as AnYiExtendProperty);

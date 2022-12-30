@@ -27,7 +27,7 @@
   import { Badge, Table } from 'ant-design-vue';
   import type { PropType } from 'vue';
   import { reactive, watch, nextTick, ref, toRaw } from 'vue';
-  import { AnYiExtendProperty } from '../../../../src/types/modeler.d';
+  import { AnYiExtendProperty } from 'anyi-process-ee-antvue/types/modeler';
   import { columns } from './data';
   const rowKey = ref('userId');
   const emit = defineEmits(['change']);
