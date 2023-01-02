@@ -3,7 +3,7 @@
     <BasicForm @register="registerForm" />
     <div class="j-box-bottom-button offset-20" style="margin-top: 30px">
       <div class="j-box-bottom-button-float">
-        <a-button preIcon="ant-design:sync-outlined" @click="onReset">重置</a-button>
+        <a-button preIcon="ant-design:sync-outlined" @click="onReset">重1置</a-button>
         <a-button type="primary" preIcon="ant-design:save-filled" @click="onSubmit">保存</a-button>
       </div>
     </div>
