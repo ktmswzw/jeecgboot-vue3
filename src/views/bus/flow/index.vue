@@ -12,7 +12,12 @@
   import { UserSingle } from './components/UserSingle';
   import { Expression } from './components/Expression';
   import { ref } from 'vue';
+  import { getAuthCache } from '/@/utils/auth';
+  import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
+  import { useTabs } from '/@/hooks/web/useTabs';
+  import { ProcessInfo } from '/#/store';
 
+  const { setTitle } = useTabs();
   const diagramDesigner = ref();
   const comps = {
     category: Category,
@@ -34,6 +39,10 @@
 
   function init() {
     const dig = diagramDesigner;
+    const info = getAuthCache<ProcessInfo>(PROCESS_INFO_KEY);
+
+    // 设置标识
+    setTitle(`${info.name}-流程设计`);
     if (!dig) {
       throw new Error('diagramDesigner is null!');
     }

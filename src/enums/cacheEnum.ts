@@ -25,12 +25,13 @@ export const APP_DARK_MODE_KEY_ = '__APP__DARK__MODE__';
 // base global local key
 export const APP_LOCAL_CACHE_KEY = 'COMMON__LOCAL__KEY__';
 
-// base global session key
 export const APP_SESSION_CACHE_KEY = 'COMMON__SESSION__KEY__';
 // 租户 key
 export const TENANT_ID = 'TENANT_ID';
 // login info key
 export const LOGIN_INFO_KEY = 'LOGIN__INFO__';
+
+export const PROCESS_INFO_KEY = 'PROCESS__INFO__';
 
 export enum CacheTypeEnum {
   SESSION,

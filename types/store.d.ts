@@ -57,3 +57,12 @@ export interface BeforeMiniState {
   menuMode?: MenuModeEnum;
   menuType?: MenuTypeEnum;
 }
+
+export interface ProcessInfo {
+  name?: string;
+  key?: string;
+  category?: string;
+  description?: string;
+  tenantId?: string;
+  version?: string;
+}

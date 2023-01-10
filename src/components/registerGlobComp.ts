@@ -4,7 +4,7 @@ import AIcon from '/@/components/jeecg/AIcon.vue';
 import { Button, JUploadButton } from './Button';
 import AnYiProcessEE from 'anyi-process-ee-antvue';
 
-import 'anyi-process-ee-antvue/dist/style.css';
+import '/@/assets/bpmn/anyi-style.css';
 import '/@/assets/bpmn/diagram-js.css';
 import 'bpmn-js-color-picker/colors/color-picker.css';
 import '/@/assets/bpmn/bpmn-font/css/bpmn.css';
