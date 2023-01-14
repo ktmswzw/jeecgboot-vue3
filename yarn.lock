@@ -984,10 +984,10 @@
   resolved "https://registry.npmmirror.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bpmn-io/diagram-js-ui@^0.2.0":
-  version "0.2.1"
-  resolved "https://registry.npmmirror.com/@bpmn-io/diagram-js-ui/-/diagram-js-ui-0.2.1.tgz#b1c26d58b382bc9548f5c2e487c0d4b244f1cdd3"
-  integrity sha512-8opVJ0MTc2T6T0/8mVSmnBvdIyYjygSahLZ394A9YprjuCoqnfhxQ4TKZ/M/oN2ynvGt6N2mQv6SOGnRhqUovA==
+"@bpmn-io/diagram-js-ui@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.npmmirror.com/@bpmn-io/diagram-js-ui/-/diagram-js-ui-0.2.2.tgz#f182476e820641901c10d0079dcfe7b5b022b9f6"
+  integrity sha512-IgOIxOwoqsFB2mMPdXtcbPVPjdYkZ3huW7ipowYLhg5jdRGHlBronQ+LER+lfWro6sPtzEsw7qX8D8Yq9M2S5g==
   dependencies:
     htm "^3.1.1"
     preact "^10.11.2"
@@ -1002,10 +1002,10 @@
     json-source-map "^0.6.1"
     min-dash "^4.0.0"
 
-"@bpmn-io/extract-process-variables@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.npmmirror.com/@bpmn-io/extract-process-variables/-/extract-process-variables-0.6.0.tgz#58391a4ae42fa7a9e3a50e3c2a4ae665847e1819"
-  integrity sha512-vq4jwGXDO11jwQgj9lvpVxVxjnRAz4C4TqPnhromcsllH5iRBrUNtBKgK0c/RWxiEGNTBhTYm19sP+LN1UcLWA==
+"@bpmn-io/extract-process-variables@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.npmmirror.com/@bpmn-io/extract-process-variables/-/extract-process-variables-0.7.0.tgz#22b5ca5de43656c685dd3e585fa00ef342156f24"
+  integrity sha512-NJcL+l5I9OY9wPD9MTfU8Slbfo/5gWYgooE0nGDVAlj6q2q4ge5sW0u6U1CoXE7YGVvn5oDcdXrgukhOQs2XWg==
   dependencies:
     min-dash "^4.0.0"
 
@@ -1043,7 +1043,7 @@
   dependencies:
     min-dash "^3.8.1"
 
-"@bpmn-io/properties-panel@^1.0.1":
+"@bpmn-io/properties-panel@^1.1.1":
   version "1.1.1"
   resolved "https://registry.npmmirror.com/@bpmn-io/properties-panel/-/properties-panel-1.1.1.tgz#a1e2069415e4ad2ac084ba92a75f5a77fa5e9f39"
   integrity sha512-8fkZZrGIBThr3BjiRf6++N/2x4grhXt2Lgci17qXlZDMSgrbztAkJABq9Lanq9gHrBIwpNS9KfZihREPWQVbqQ==
@@ -3064,23 +3064,23 @@ ant-design-vue@^3.2.12:
     vue-types "^3.0.0"
     warning "^4.0.0"
 
-anyi-process-ee-antvue@2.0.0-beta3:
-  version "2.0.0-beta3"
-  resolved "https://registry.npmmirror.com/anyi-process-ee-antvue/-/anyi-process-ee-antvue-2.0.0-beta3.tgz#7c30066a09cd5f4ae1ecb7b2e28ac38c24ff0ee5"
-  integrity sha512-FxlcCywFJA82RY4duSaJqQLnxuSYmp0A9ZSBknA8vs+BF+g51kU0mn48Si3dSyAV2aHWORiDAk4K91ZEpwzvcw==
+anyi-process-ee-antvue@2.0.0-beta16:
+  version "2.0.0-beta16"
+  resolved "https://registry.npmmirror.com/anyi-process-ee-antvue/-/anyi-process-ee-antvue-2.0.0-beta16.tgz#92218e79cf909de37b9584f9dc5fda9b88cb794d"
+  integrity sha512-acZqDkmkrhyC3nqmwQ+wEows6Lg0Bku3BoISHE7KQ2JWNm89MfPCerNPGgPWg4PlHJ/O6z5rjdyOp+fBoTM9mg==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons-vue" "^6.0.1"
-    "@bpmn-io/properties-panel" "^1.0.1"
+    "@bpmn-io/properties-panel" "^1.1.1"
     "@highlightjs/vue-plugin" "^2.1.0"
     "@vueuse/core" "^8.6.0"
     ant-design-vue "^3.2.12"
-    bpmn-js "^11.0.3"
+    bpmn-js "^11.1.1"
     bpmn-js-bpmnlint "^0.19.0"
-    bpmn-js-color-picker "^0.4.0"
+    bpmn-js-color-picker "^0.5.0"
     bpmn-js-differ "^2.0.2"
-    bpmn-js-properties-panel "^1.12.0"
-    bpmn-js-token-simulation "^0.28.0"
+    bpmn-js-properties-panel "^1.15.1"
+    bpmn-js-token-simulation "^0.29.0"
     bpmnlint "^8.1.1"
     bpmnlint-loader "^0.1.6"
     camunda-bpmn-js-behaviors "^0.4.0"
@@ -3091,11 +3091,11 @@ anyi-process-ee-antvue@2.0.0-beta3:
     lodash "^2.4.0"
     lodash.pick "^4.4.0"
     min-dash "^3.8.1"
-    vue "^3.2.3"
+    vue "^3.2.40"
     vue-i18n "9.1.7"
     vue-json-pretty "^2.0.6"
     vue3-quill "^0.2.6"
-    zeebe-bpmn-moddle "^0.16.0"
+    zeebe-bpmn-moddle "^0.17.0"
 
 anymatch@^3.0.3, anymatch@~3.1.2:
   version "3.1.3"
@@ -3510,13 +3510,12 @@ bpmn-js-bpmnlint@^0.19.0:
     min-dash "^3.5.2"
     min-dom "^3.1.3"
 
-bpmn-js-color-picker@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.npmmirror.com/bpmn-js-color-picker/-/bpmn-js-color-picker-0.4.0.tgz#f26838aad56763a7c04dedeaa62460aa368a99ee"
-  integrity sha512-pBf66r/oR5NhqJQxzlQmCYTwpaSPgh2JW9p/0Q1Nc6rvvDcbN/VgDnNLB9dnW3wlus9OqVZY2jXYL74TDJrk4A==
+bpmn-js-color-picker@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmmirror.com/bpmn-js-color-picker/-/bpmn-js-color-picker-0.5.0.tgz#487c67b066667cd6e5deb47c8a9468b4dfce9555"
+  integrity sha512-inRM+z7PWHKFaeMH/vSY1JE0TiM3uHMzPc8d1nOXi8hzkHzUQQiNmhUEjlNmj8A4/agukVQIPq5Wlip9udLclA==
   dependencies:
-    min-dom "^3.1.3"
-    tiny-svg "^2.2.2"
+    min-dom "^4.0.3"
 
 bpmn-js-differ@^2.0.2:
   version "2.0.2"
@@ -3526,13 +3525,13 @@ bpmn-js-differ@^2.0.2:
     diffpatch "^0.5.1"
     min-dash "^3.0.0"
 
-bpmn-js-properties-panel@^1.12.0:
-  version "1.14.0"
-  resolved "https://registry.npmmirror.com/bpmn-js-properties-panel/-/bpmn-js-properties-panel-1.14.0.tgz#3edf6ccbbb85a555af0462cfee4404215aed17c0"
-  integrity sha512-iH2qgvDnL6RQ/XFd+yDz+24oUgoG3CkLYV7F28SnF0WXrtCHTVT0T58xHGAmQKpt2MNxjriJY0IOHqLsR1qE1A==
+bpmn-js-properties-panel@^1.15.1:
+  version "1.15.1"
+  resolved "https://registry.npmmirror.com/bpmn-js-properties-panel/-/bpmn-js-properties-panel-1.15.1.tgz#81b9a779b49214e87c3af9328c6d4d9d628e5655"
+  integrity sha512-ro60UycvJ+5RLuoj0WVC8My2eiFJdxBKAFVAIvICpsxwOxbOtogK5Mid/xNcC4vGwOd7ImF+Q0sEifIOKmUgag==
   dependencies:
     "@bpmn-io/element-templates-validator" "^0.11.0"
-    "@bpmn-io/extract-process-variables" "^0.6.0"
+    "@bpmn-io/extract-process-variables" "^0.7.0"
     array-move "^3.0.1"
     classnames "^2.3.1"
     ids "^1.0.0"
@@ -3541,28 +3540,29 @@ bpmn-js-properties-panel@^1.12.0:
     preact-markup "^2.1.1"
     semver-compare "^1.0.0"
 
-bpmn-js-token-simulation@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.npmmirror.com/bpmn-js-token-simulation/-/bpmn-js-token-simulation-0.28.0.tgz#86bd91545dd33b8caf01f6c19811563d15e66612"
-  integrity sha512-pdC62e85IEOBVVjDP4IqW4kQ8BYj5e8+a8OCD1ll8z/ElN6pxm6XAk+4BU64kYH785xNqvox+ipRbjvU53OH2w==
+bpmn-js-token-simulation@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.npmmirror.com/bpmn-js-token-simulation/-/bpmn-js-token-simulation-0.29.0.tgz#4d87644503e16c65f59bc36f9181f4fb84541bb8"
+  integrity sha512-CJhCVhbOi37ZA0ZAtH9LCKT+tba/LTPZU9B5ozMwPzUl3uGt4SR4o4pC9UY3IofVZ1jdk/rhcMIEUps7TA9SvA==
   dependencies:
+    inherits-browser "^0.1.0"
     min-dash "^4.0.0"
     min-dom "^4.0.3"
     randomcolor "^0.6.2"
 
-bpmn-js@^11.0.3:
-  version "11.1.0"
-  resolved "https://registry.npmmirror.com/bpmn-js/-/bpmn-js-11.1.0.tgz#3e0aee7fbd08c7e4a3b4e2e6eb578d9e6f3a20a3"
-  integrity sha512-E4jepvYHxEwCVBppi6DYidwvCa0yu94Ho22js5H5a/AKuC4xBf2uoTSzCrEgQP0vwRD3nDMuvsO2B/vLDeEc0w==
+bpmn-js@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.npmmirror.com/bpmn-js/-/bpmn-js-11.1.1.tgz#b4033d61c32a851bdf5de0cda1a9193fb4372985"
+  integrity sha512-Co3RJ3eevmpfsUMm72ktdxUiXJeYp9Z+vdOgLT50lS0oz3x0FSxx7QVaAeKfjYumnEYd1V7a6csbduxzA8ZStQ==
   dependencies:
     bpmn-moddle "^8.0.0"
     css.escape "^1.5.1"
-    diagram-js "^11.4.1"
+    diagram-js "^11.4.3"
     diagram-js-direct-editing "^2.0.0"
     ids "^1.0.0"
     inherits-browser "^0.1.0"
     min-dash "^4.0.0"
-    min-dom "^4.0.2"
+    min-dom "^4.0.3"
     object-refs "^0.3.0"
     tiny-svg "^3.0.0"
 
@@ -4960,12 +4960,12 @@ diagram-js-minimap@^3.0.0:
     min-dom "^4.0.2"
     tiny-svg "^3.0.0"
 
-diagram-js@^11.4.1:
-  version "11.4.1"
-  resolved "https://registry.npmmirror.com/diagram-js/-/diagram-js-11.4.1.tgz#e93b0859ee9f5c836f799abf221e9c564aaa9337"
-  integrity sha512-JYVNwoGZY1Zi/2LoXpPUBLu9dGgEzWNqK4yH6nnGNDfqrtfALK3RaMXFMVrKdmX5XV/DmSMf4qFpu/U/8s7VDw==
+diagram-js@^11.4.3:
+  version "11.4.4"
+  resolved "https://registry.npmmirror.com/diagram-js/-/diagram-js-11.4.4.tgz#779a4291128ab65e8835d70fc88e5819f8debebb"
+  integrity sha512-utKzP3zqun6DwWiGc62aJpxsRxwhFQjiTaFJEHZS3XKimPvlbsEN4dqAAIUqQ5pFjtNNlNTZ2dkF0JsjJpwqCg==
   dependencies:
-    "@bpmn-io/diagram-js-ui" "^0.2.0"
+    "@bpmn-io/diagram-js-ui" "^0.2.2"
     clsx "^1.2.1"
     css.escape "^1.5.1"
     didi "^9.0.0"
@@ -12442,7 +12442,7 @@ vue3-quill@^0.2.6:
     quill "^1.3.7"
     vue "^3.0.11"
 
-vue@^3.0.11, vue@^3.2.3, vue@^3.2.45:
+vue@^3.0.11, vue@^3.2.40, vue@^3.2.45:
   version "3.2.45"
   resolved "https://registry.npmmirror.com/vue/-/vue-3.2.45.tgz#94a116784447eb7dbd892167784619fef379b3c8"
   integrity sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA==
@@ -12961,10 +12961,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.npmmirror.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zeebe-bpmn-moddle@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.npmmirror.com/zeebe-bpmn-moddle/-/zeebe-bpmn-moddle-0.16.0.tgz#76dcff116268e531cabeef121c9d9de3ea46c717"
-  integrity sha512-Fr6NqtWWl604wMnEKis8CIyyi4DGSPsFaGB4rm4bwjbOY2O3d1UrvFS4LnOAxUi6SH8Q1agdBU1GjUXYz5pAtA==
+zeebe-bpmn-moddle@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.npmmirror.com/zeebe-bpmn-moddle/-/zeebe-bpmn-moddle-0.17.0.tgz#2fab9411357e7ae409b401480abde8e0904f0013"
+  integrity sha512-Phe0suKe74GuGi/4gESvHeu984kmRHSVmyBJu1UU+MAEFjppk5lrmMNzfu9ebEK/rP9MG5SiSkGJ6/mEr9+tAw==
 
 zrender@5.4.1:
   version "5.4.1"

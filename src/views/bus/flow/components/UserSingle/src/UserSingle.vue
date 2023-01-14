@@ -1,7 +1,16 @@
 <template>
-  <Tabs v-model:activeKey="activeKey" size="small" @change="handleActiveChange" :tabBarStyle="{ margin: '0px' }">
+  <Tabs
+    v-model:activeKey="activeKey"
+    size="small"
+    @change="handleActiveChange"
+    :tabBarStyle="{ margin: '0px' }"
+  >
     <TabPane :key="1" tab="系统">
-      <SystemFixedUser @change="handleChange" :modelValue="singleData.value" :systemDataType="systemDataType" />
+      <SystemFixedUser
+        @change="handleChange"
+        :modelValue="singleData.value"
+        :systemDataType="systemDataType"
+      />
     </TabPane>
     <TabPane :key="2" tab="表达式">
       <SystemExpression @change="handleChange" :modelValue="singleData.value" />
@@ -19,7 +28,7 @@
   import SystemExpression from './SystemExpression.vue';
   import SystemFixedUser from './SystemFixedUser.vue';
   import type { PropType } from 'vue';
-  import { AnYiExtendInfoSingle, AnYiExtendProperty } from '../../../../src/types/modeler';
+  import { AnYiExtendInfoSingle, AnYiExtendProperty } from '/@/views/bus/flow/types/designercommon.d';
   const emit = defineEmits(['change']);
   const activeKey = ref<number>(1);
   const singleData = reactive<AnYiExtendInfoSingle>({} as AnYiExtendInfoSingle);

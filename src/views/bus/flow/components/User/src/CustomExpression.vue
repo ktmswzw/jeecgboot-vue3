@@ -1,7 +1,22 @@
 <template>
-  <Form :label-col="{ span: 3 }" :wrapper-col="{ span: 16 }" autocomplete="off" layout="vertical" style="margin: 20px" :model="data">
-    <FormItem label="表达式名称" name="valueDescribe" :rules="{ required: true, message: '请输入表达式名称!' }">
-      <Input placeholder="请输入表达式名称" v-model:value="data.valueDescribe" @change="handleChange" />
+  <Form
+    :label-col="{ span: 3 }"
+    :wrapper-col="{ span: 16 }"
+    autocomplete="off"
+    layout="vertical"
+    style="margin: 20px"
+    :model="data"
+  >
+    <FormItem
+      label="表达式名称"
+      name="valueDescribe"
+      :rules="{ required: true, message: '请输入表达式名称!' }"
+    >
+      <Input
+        placeholder="请输入表达式名称"
+        v-model:value="data.valueDescribe"
+        @change="handleChange"
+      />
     </FormItem>
     <FormItem
       label="表达式内容"
@@ -14,7 +29,12 @@
       }"
       help="必须'${'符号开头，'}'符号结尾"
     >
-      <TextArea :rows="4" @change="handleChange" placeholder="请输入表达式内容" v-model:value="data.value" />
+      <TextArea
+        :rows="4"
+        @change="handleChange"
+        placeholder="请输入表达式内容"
+        v-model:value="data.value"
+      />
     </FormItem>
   </Form>
 </template>
@@ -23,7 +43,7 @@
   import { watch, reactive, toRaw } from 'vue';
   import type { PropType } from 'vue';
   import { Form, FormItem, Input } from 'ant-design-vue';
-  import { AnYiExtendProperty } from 'anyi-process-ee-antvue/types/modeler';
+  import { AnYiExtendProperty } from '/@/views/bus/flow/types/designercommon.d';
   const TextArea = Input.TextArea;
   const emit = defineEmits(['change']);
   const data = reactive<AnYiExtendProperty>({} as AnYiExtendProperty);

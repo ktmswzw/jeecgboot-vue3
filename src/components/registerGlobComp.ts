@@ -4,17 +4,19 @@ import AIcon from '/@/components/jeecg/AIcon.vue';
 import { Button, JUploadButton } from './Button';
 import AnYiProcessEE from 'anyi-process-ee-antvue';
 
-import '/@/assets/bpmn/anyi-style.css';
-import '/@/assets/bpmn/diagram-js.css';
+import 'anyi-process-ee-antvue/dist/style.css';
 import 'bpmn-js-color-picker/colors/color-picker.css';
+
 import '/@/assets/bpmn/bpmn-font/css/bpmn.css';
 import '/@/assets/bpmn/bpmn-font/css/bpmn-codes.css';
 import '/@/assets/bpmn/bpmn-font/css/bpmn-embedded.css';
 import '/@/assets/bpmn/bpmn-js.css';
+import '/@/assets/bpmn/diagram-js.css';
 import '/@/assets/bpmn/properties-panel.css';
 import '/@/assets/bpmn/bpmn-js-token-simulation.css';
 import '/@/assets/bpmn/diagram-js-minimap.css';
 import '/@/assets/bpmn/bpmn-js-bpmnlint.css';
+
 import {
   // Need
   Button as AntButton,

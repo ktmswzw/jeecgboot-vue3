@@ -26,9 +26,9 @@
 <script lang="ts" setup>
   import { Badge, Table } from 'ant-design-vue';
   import type { PropType } from 'vue';
-  import { reactive, watch, nextTick, ref, toRaw } from 'vue';
+  import { reactive, watch, ref, toRaw } from 'vue';
+  import { AnYiExtendProperty } from '/@/views/bus/flow/types/designercommon.d';
   import { columns } from './data';
-  import { AnYiExtendProperty } from 'anyi-process-ee-antvue/types/modeler';
   const rowKey = ref('userId');
   const emit = defineEmits(['change']);
   const userData = reactive([
@@ -155,11 +155,11 @@
     }
     selectionChange();
   }
-  function handleClientChange(record, index) {
+  function handleClientChange(record, _index) {
     const key = record[rowKey.value];
     selectCustomChange(record, key, 'radio');
   }
-  function selectCustomChange(record, key, type) {
+  function selectCustomChange(record, key, _type) {
     if (!selectKeys.value) {
       selectKeys.value = [];
       selectRows.value = [];

@@ -19,7 +19,7 @@
   import SystemExpression from './SystemExpression.vue';
   import SystemFixedRole from './SystemFixedRole.vue';
   import type { PropType } from 'vue';
-  import { AnYiExtendInfoArray, AnYiExtendProperty } from '../../../../src/types/modeler.d';
+  import { AnYiExtendInfoArray, AnYiExtendProperty } from '/@/views/bus/flow/types/designercommon.d';
   const emit = defineEmits(['change']);
   const activeKey = ref<number>(1);
   const arrayData = reactive<AnYiExtendInfoArray>({} as AnYiExtendInfoArray);

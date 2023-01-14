@@ -14,9 +14,8 @@
 <script lang="ts" setup>
   import { ref, computed, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { processModalFormSchema } from '../process.data';
+  import { formSchema } from '../process.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
-  import { processCreate } from '../category.flow.api';
   import { useDrawerAdaptiveWidth } from '/@/hooks/jeecg/useAdaptiveWidth';
   // 声明Emits
   const emit = defineEmits(['success', 'register']);
@@ -25,7 +24,7 @@
   //表单配置
   const [registerForm, { setProps, resetFields, validate, setFieldsValue }] = useForm({
     labelWidth: 90,
-    schemas: processModalFormSchema,
+    schemas: formSchema,
     showActionButtonGroup: false,
   });
   const showFooter = ref(true);
@@ -53,7 +52,7 @@
       console.log(values);
       setDrawerProps({ confirmLoading: true });
       //提交表单
-      await processCreate(values);
+      // await processCreate(values);
       //关闭弹窗
       closeDrawer();
       //刷新列表

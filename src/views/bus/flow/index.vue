@@ -1,6 +1,6 @@
 <template>
   <div class="mt-2">
-    <AnYiBpmnDesigner @change="handleChange" ref="diagramDesigner" :comps="comps" />
+    <AnYiBpmnDesignerCamunda @change="handleChange" @save="handleSave" @deployment="handleDeployment" ref="diagramDesigner" :comps="comps" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -9,15 +9,20 @@
   import { Role } from './components/Role';
   import { User } from './components/User';
   import { Time } from './components/Time';
+  import type { BpmnDiagramInfo } from '/@/views/bus/flow/types/designercommon.d';
   import { UserSingle } from './components/UserSingle';
   import { Expression } from './components/Expression';
   import { ref } from 'vue';
+  import { CAMUNDA_MODEL } from './process';
   import { getAuthCache } from '/@/utils/auth';
   import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
   import { useTabs } from '/@/hooks/web/useTabs';
   import { ProcessInfo } from '/#/store';
+  import { processCreate } from '/@/views/bus/flowTree/category.flow.api';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useI18n } from '/@/hooks/web/useI18n';
+  import {b64toBlob, dataURLtoFile} from '/@/utils';
 
-  const { setTitle } = useTabs();
   const diagramDesigner = ref();
   const comps = {
     category: Category,
@@ -32,21 +37,40 @@
     candidateGroups: Role,
     candidateUsers: User,
   };
-
-  function handleChange(__diagram: any) {
-    // console.log('---diagram---', diagram);
+  const { t } = useI18n();
+  const { notification } = useMessage();
+  function handleChange(diagram: BpmnDiagramInfo) {
+    console.log('--模型发生了变更----', diagram);
+  }
+  function handleSave(diagram: BpmnDiagramInfo) {
+    console.log('---点击了保存按钮---', diagram);
+  }
+  function handleDeployment(diagram: BpmnDiagramInfo) {
+    console.log('---点击了部署按钮---', diagram);
+    const info = getAuthCache(PROCESS_INFO_KEY);
+    console.log(info)
+    const data = {
+      base64: diagram.diagramBase64Data,
+      name: diagram.diagramNames,
+      category: info[0],
+      tenantId: '1',
+      key: diagram.processDefinitionKeys
+    };
+    console.error(data);
+    processCreate(data);
+    notification.success({ message: t('bus.flow.deploymentSuccess') });
   }
 
   function init() {
-    const dig = diagramDesigner;
-    const info = getAuthCache<ProcessInfo>(PROCESS_INFO_KEY);
 
     // 设置标识
-    setTitle(`${info.name}-流程设计`);
-    if (!dig) {
+    // setTitle(`流程设计`);
+    if (!diagramDesigner.value) {
       throw new Error('diagramDesigner is null!');
     }
-    dig.value.createNewDiagram();
+    // diagramDesigner.value.createNewDiagram();
+
+    diagramDesigner.value.openBase64Diagram(CAMUNDA_MODEL);
   }
 
   onMounted(() => {

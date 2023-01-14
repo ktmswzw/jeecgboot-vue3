@@ -1,42 +1,41 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import {duplicateCheck, getAllTenantList} from '/@/views/system/user/user.api';
+import { duplicateCheck, getAllTenantList } from '/@/views/system/user/user.api';
 
-// 用户信息 columns
-export const processInfoColumns: BasicColumn[] = [
+export const columns: BasicColumn[] = [
   {
     title: '名称',
+    align: 'center',
     dataIndex: 'name',
-    width: 150,
   },
   {
     title: 'Key',
+    align: 'center',
     dataIndex: 'key',
-    width: 180,
   },
   {
     title: '类别',
+    align: 'center',
     dataIndex: 'category',
-    width: 200,
-  },
-  {
-    title: '描述',
-    dataIndex: 'description',
-    width: 80,
   },
   {
     title: '企业',
+    align: 'center',
     dataIndex: 'tenantId',
-    width: 120,
+  },
+  {
+    title: '描述',
+    align: 'center',
+    dataIndex: 'description',
   },
   {
     title: '版本',
+    align: 'center',
     dataIndex: 'version',
-    width: 120,
   },
 ];
 
 // 信息查询条件表单
-export const processInfoSearchFormSchema: FormSchema[] = [
+export const searchFormSchema: FormSchema[] = [
   {
     field: 'key',
     label: '主键',
@@ -50,7 +49,7 @@ export const processInfoSearchFormSchema: FormSchema[] = [
 ];
 
 // 弹窗form表单
-export const processModalFormSchema: FormSchema[] = [
+export const formSchema: FormSchema[] = [
   {
     label: 'id',
     field: 'id',
@@ -131,8 +130,14 @@ export const processModalFormSchema: FormSchema[] = [
   },
   {
     field: 'category',
+    component: 'JTreeSelect',
     label: '类别',
-    component: 'Input',
+    componentProps: {
+      dict: 'bus_flow_category,name,id',
+      pidField: 'pid',
+      hasChildField: 'has_child',
+      converIsLeafVal: 0,
+    }
   },
   {
     label: '租户',

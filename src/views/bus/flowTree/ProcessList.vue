@@ -29,12 +29,12 @@
   import { useListPage } from '/@/hooks/system/useListPage';
 
   import ProcessDrawer from './components/ProcessDrawer.vue';
-  import { processList } from './category.flow.api';
-  import { processInfoColumns, processInfoSearchFormSchema, processModalFormSchema } from './process.data';
-  import { ColEx } from '/@/components/Form/src/types';
+  import { processList, deployList } from './category.flow.api';
+  import { columns, searchFormSchema } from './process.data';
   import { setAuthCache } from '/@/utils/auth';
   import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
-  import {useGo} from "/@/hooks/web/usePage";
+  import { useGo } from '/@/hooks/web/usePage';
+  import { deleteOne, getExportUrl, getImportUrl } from '/@/views/bus/alert/BusEventAlert.api';
 
   const prefixCls = inject('prefixCls');
   const props = defineProps({
@@ -42,45 +42,33 @@
   });
   // 当前选中的部门ID，可能会为空，代表未选择部门
   const treeID = computed(() => props.data?.key);
-
-  // 自适应列配置
-  const adaptiveColProps: Partial<ColEx> = {
-    xs: 24, // <576px
-    sm: 24, // ≥576px
-    md: 24, // ≥768px
-    lg: 12, // ≥992px
-    xl: 12, // ≥1200px
-    xxl: 8, // ≥1600px
-  };
+  const registerModal = ref();
+  const queryParam = ref<any>({});
   // 列表页面公共参数、方法
-  const { tableContext, createMessage } = useListPage({
+  const { tableContext, createMessage, onExportXls, onImportXls } = useListPage({
     tableProps: {
-      api: processList,
-      columns: processInfoColumns,
+      api: deployList,
+      columns,
       canResize: false,
-      formConfig: {
-        schemas: processInfoSearchFormSchema,
-        baseColProps: adaptiveColProps,
-        labelAlign: 'left',
-        labelCol: {
-          xs: 24,
-          sm: 24,
-          md: 24,
-          lg: 9,
-          xl: 7,
-          xxl: 5,
-        },
-        wrapperCol: {},
-        // 操作按钮配置
-        actionColOptions: {
-          ...adaptiveColProps,
-          style: { textAlign: 'left' },
-        },
+      useSearchForm: false,
+      actionColumn: {
+        width: 120,
+        fixed: 'right',
       },
       // 请求之前对参数做处理
       beforeFetch(params) {
         params.category = treeID.value;
+
+        return Object.assign(params, queryParam.value);
       },
+    },
+    exportConfig: {
+      name: '预警清单',
+      url: getExportUrl,
+    },
+    importConfig: {
+      url: getImportUrl,
+      success: handleSuccess,
     },
   });
 
@@ -104,40 +92,74 @@
     if (!treeID.value) {
       createMessage.warning('请先选择一个分类');
     } else {
-      openDrawer(true, {
-        isUpdate: false,
-        departDisabled: true,
-        record: {
-          category: treeID.value,
-        },
-      });
+      let values = {
+        category: treeID.value,
+      };
+      setAuthCache(PROCESS_INFO_KEY, values);
+      go(`/bpmn/index`);
+      // openDrawer(true, {
+      //   isUpdate: false,
+      //   departDisabled: true,
+      //   record: {
+      //     category: treeID.value,
+      //   },
+      // });
     }
   }
 
-  // 查看用户详情
-  function showUserDetail(record) {
-    openDrawer(true, {
-      record,
-      isUpdate: true,
-      departDisabled: true,
-      showFooter: false,
-    });
-  }
-
   // 编辑用户信息
-  function editUserInfo(record) {
-    openDrawer(true, { isUpdate: true, record, departDisabled: true });
+  function editUserInfo() {
+    go(`/bpmn/index`);
   }
 
   /**
    * 用户抽屉表单成功回调
    */
   function onUserDrawerSuccess({ isUpdate, values }) {
-    setAuthCache(PROCESS_INFO_KEY, values);
-    go(`/bpmn/index`);
+    // setAuthCache(PROCESS_INFO_KEY, values);
+    // go(`/bpmn/index`);
     isUpdate ? updateTableDataRecord(values.id, values) : reload();
   }
 
+  /**
+   * 详情
+   */
+  function handleDetail(record: Recordable) {
+    registerModal.value.disableSubmit = true;
+    registerModal.value.edit(record);
+  }
+
+  /**
+   * 成功回调
+   */
+  function handleSuccess() {
+    (selectedRowKeys.value = []) && reload();
+  }
+
+  /**
+   * 删除事件
+   */
+  async function handleDelete(record) {
+    await deleteOne({ id: record.id }, handleSuccess);
+  }
+  /**
+   * 下拉操作栏
+   */
+  function getDropDownAction(record) {
+    return [
+      {
+        label: '详情',
+        onClick: handleDetail.bind(null, record),
+      },
+      {
+        label: '删除',
+        popConfirm: {
+          title: '是否确认删除',
+          confirm: handleDelete.bind(null, record),
+        },
+      },
+    ];
+  }
   /**
    * 操作栏
    */
@@ -145,3 +167,21 @@
     return [{ label: '编辑', onClick: editUserInfo.bind(null, record) }];
   }
 </script>
+<style lang="less" scoped>
+  .jeecg-basic-table-form-container {
+    .table-page-search-submitButtons {
+      display: block;
+      margin-bottom: 24px;
+      white-space: nowrap;
+    }
+    .query-group-cust {
+      width: calc(50% - 15px);
+      min-width: 100px !important;
+    }
+    .query-group-split-cust {
+      width: 30px;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+</style>

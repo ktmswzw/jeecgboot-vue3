@@ -4,8 +4,8 @@ enum Api {
   treeList = '/category/busFlowCategory/loadTreeRoot',
   searchBy = '/category/busFlowCategory/loadTreeRoot',
   processList = '/flowable/processList',
+  deployList = '/flowable/deployList',
   processCreate = '/flowable/processCreate',
-  duplicateCheck = '/sys/duplicate/check',
 }
 
 /**
@@ -13,11 +13,10 @@ enum Api {
  */
 export const queryTreeList = (params?) => defHttp.get({ url: Api.treeList, params }, { isTransformResponse: false });
 
-export const processList = (params?) => defHttp.get({ url: Api.processList, params }, { isTransformResponse: false });
+export const processList = (params?) => defHttp.get({ url: Api.processList, params });
+export const deployList = (params?) => defHttp.get({ url: Api.deployList, params });
 
-export const duplicateCheck = (params) => defHttp.get({ url: Api.duplicateCheck, params }, { isTransformResponse: false });
-
-export const processCreate = (params?) => defHttp.post({ url: Api.processCreate, params }, { isTransformResponse: false });
+export const processCreate = (params?) => defHttp.post({ url: Api.processCreate, params });
 /**
  * 根据关键字搜索部门
  */

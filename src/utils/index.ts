@@ -82,10 +82,10 @@ export function getDynamicProps<T, U>(props: T): Partial<U> {
  * @updateBy:zyf
  */
 export function getValueType(props, field) {
-  let formSchema = unref(unref(props)?.schemas);
+  const formSchema = unref(unref(props)?.schemas);
   let valueType = 'string';
   if (formSchema) {
-    let schema = formSchema.filter((item) => item.field === field)[0];
+    const schema = formSchema.filter((item) => item.field === field)[0];
     valueType = schema.componentProps && schema.componentProps.valueType ? schema.componentProps.valueType : valueType;
   }
   return valueType;
@@ -129,11 +129,11 @@ export const withInstall = <T>(component: T, alias?: string) => {
  * @param paraName
  */
 export function getUrlParam(paraName) {
-  let url = document.location.toString();
-  let arrObj = url.split('?');
+  const url = document.location.toString();
+  const arrObj = url.split('?');
 
   if (arrObj.length > 1) {
-    let arrPara = arrObj[1].split('&');
+    const arrPara = arrObj[1].split('&');
     let arr;
 
     for (let i = 0; i < arrPara.length; i++) {
@@ -172,7 +172,7 @@ export function sleep(ms: number, fn?: Fn) {
  * @returns {String} 替换后的字符串
  */
 export function replaceAll(text, checker, replacer) {
-  let lastText = text;
+  const lastText = text;
   text = text.replace(checker, replacer);
   if (lastText !== text) {
     return replaceAll(text, checker, replacer);
@@ -187,14 +187,14 @@ export function replaceAll(text, checker, replacer) {
 export function getQueryVariable(url) {
   if (!url) return;
 
-  var t,
+  let t,
     n,
     r,
     i = url.split('?')[1],
     s = {};
   (t = i.split('&')), (r = null), (n = null);
-  for (var o in t) {
-    var u = t[o].indexOf('=');
+  for (const o in t) {
+    const u = t[o].indexOf('=');
     u !== -1 && ((r = t[o].substr(0, u)), (n = t[o].substr(u + 1)), (s[r] = n));
   }
   return s;
@@ -217,7 +217,7 @@ export function showDealBtn(bpmStatus) {
  */
 export function numToUpper(value) {
   if (value != '') {
-    let unit = new Array('仟', '佰', '拾', '', '仟', '佰', '拾', '', '角', '分');
+    const unit = ['仟', '佰', '拾', '', '仟', '佰', '拾', '', '角', '分'];
     const toDx = (n) => {
       switch (n) {
         case '0':
@@ -242,10 +242,10 @@ export function numToUpper(value) {
           return '玖';
       }
     };
-    let lth = value.toString().length;
+    const lth = value.toString().length;
     value *= 100;
     value += '';
-    let length = value.length;
+    const length = value.length;
     if (lth <= 8) {
       let result = '';
       for (let i = 0; i < length; i++) {
@@ -303,7 +303,6 @@ export function importViewsFile(path): Promise<any> {
 }
 //update-end-author:taoyan date:2022-6-8 for:解决老的vue2动态导入文件语法 vite不支持的问题
 
-
 /**
  * 跳转至积木报表的 预览页面
  * @param url
@@ -312,17 +311,16 @@ export function importViewsFile(path): Promise<any> {
  */
 export function goJmReportViewPage(url, id, token) {
   // URL支持{{ window.xxx }}占位符变量
-  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => eval(s2))
+  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => eval(s2));
   if (url.includes('?')) {
-    url += '&'
+    url += '&';
   } else {
-    url += '?'
+    url += '?';
   }
-  url += `id=${id}`
-  url += `&token=${token}`
-  window.open(url)
+  url += `id=${id}`;
+  url += `&token=${token}`;
+  window.open(url);
 }
-
 
 export function resetSize(vm) {
   let img_width, img_height, bar_width, bar_height; //图片的宽度、高度，移动条的宽度、高度
@@ -422,3 +420,41 @@ export const _code_chars = [
 export const _code_color1 = ['#fffff0', '#f0ffff', '#f0fff0', '#fff0f0'];
 export const _code_color2 = ['#FF0033', '#006699', '#993366', '#FF9900', '#66CC66', '#FF33CC'];
 
+export function b64toBlob(b64Data, contentType, sliceSize) {
+  contentType = contentType || '';
+  sliceSize = sliceSize || 512;
+
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+
+    // @ts-ignore
+    byteArrays.push(byteArray);
+  }
+
+  console.log(byteArrays);
+
+  return new File(byteArrays, 'pot', { type: contentType });
+}
+
+export function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(','),
+    bStr = atob(arr[1]),
+    mime = arr[0].match(/:(.*?);/)[1];
+  let n = bStr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bStr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}

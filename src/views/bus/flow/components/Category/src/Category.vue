@@ -1,16 +1,18 @@
 <template>
-  <Select
-    class="anyi-width-full"
-    :options="options"
+  <JTreeSelect
+    ref="treeSelect"
+    placeholder="请选择"
     v-model:value="category"
-    placeholder="请选择流程类别"
     @change="functionChange"
-    :getPopupContainer="(triggerNode) => triggerNode.parentNode"
-  ></Select>
+    dict="bus_flow_category,name,id"
+    pidValue="0"
+    loadTriggleChange
+  >
+  </JTreeSelect>
 </template>
 
 <script lang="ts" setup>
-  import { Select } from 'ant-design-vue';
+  import JTreeSelect from '/@/components/Form/src/jeecg/components/JTreeSelect.vue';
   import { ref, watch } from 'vue';
   const props = defineProps({
     modelValue: {
