@@ -12,16 +12,16 @@ export const columns: BasicColumn[] = [
     align: 'center',
     dataIndex: 'key',
   },
-  {
-    title: '类别',
-    align: 'center',
-    dataIndex: 'category',
-  },
-  {
-    title: '企业',
-    align: 'center',
-    dataIndex: 'tenantId',
-  },
+  // {
+  //   title: '类别',
+  //   align: 'center',
+  //   dataIndex: 'category',
+  // },
+  // {
+  //   title: '企业',
+  //   align: 'center',
+  //   dataIndex: 'tenantId',
+  // },
   {
     title: '描述',
     align: 'center',

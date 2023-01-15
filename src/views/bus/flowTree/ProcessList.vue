@@ -3,7 +3,7 @@
   <BasicTable @register="registerTable" :rowSelection="rowSelection">
     <!--插槽:table标题-->
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createProcess">新建设计</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createProcess">新建流程</a-button>
       <template v-if="selectedRowKeys.length > 0">
         <a-dropdown>
           <a-button>
@@ -29,7 +29,7 @@
   import { useListPage } from '/@/hooks/system/useListPage';
 
   import ProcessDrawer from './components/ProcessDrawer.vue';
-  import { processList, deployList } from './category.flow.api';
+  import { processList, deployList, startProcess } from './category.flow.api';
   import { columns, searchFormSchema } from './process.data';
   import { setAuthCache } from '/@/utils/auth';
   import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
@@ -52,7 +52,7 @@
       canResize: false,
       useSearchForm: false,
       actionColumn: {
-        width: 120,
+        width: 150,
         fixed: 'right',
       },
       // 请求之前对参数做处理
@@ -112,6 +112,14 @@
     go(`/bpmn/index`);
   }
 
+  async function startProcessMe(record) {
+    await startProcess({
+      id: record,
+    }).then((res) => {
+      console.log(res);
+    });
+  }
+
   /**
    * 用户抽屉表单成功回调
    */
@@ -164,7 +172,10 @@
    * 操作栏
    */
   function getTableAction(record): ActionItem[] {
-    return [{ label: '编辑', onClick: editUserInfo.bind(null, record) }];
+    return [
+      { label: '发起', onClick: startProcessMe.bind(null, record) },
+      { label: '部署', onClick: editUserInfo.bind(null, record) },
+    ];
   }
 </script>
 <style lang="less" scoped>

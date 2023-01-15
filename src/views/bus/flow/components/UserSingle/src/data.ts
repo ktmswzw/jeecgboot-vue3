@@ -21,15 +21,15 @@ export const expressionColumns = [
 export const columns = [
   {
     title: '用户账号',
-    dataIndex: 'userName',
+    dataIndex: 'username',
   },
   {
     title: '真实姓名',
-    dataIndex: 'realName',
+    dataIndex: 'realname',
   },
   {
     title: '用户状态',
     width: 100,
-    dataIndex: 'userStatus',
+    dataIndex: 'status',
   },
 ];

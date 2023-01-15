@@ -110,7 +110,7 @@
           if (Array.isArray(result)) {
             treeData.value = result;
           } else {
-            createMessage.warning('未查询到部门信息');
+            createMessage.warning('未查询到信息');
             treeData.value = [];
           }
         })

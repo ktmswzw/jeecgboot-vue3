@@ -14,9 +14,9 @@
     size="small"
   >
     <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'userStatus'">
-        <Badge status="default" v-if="record.userStatus == 0" text="未激活" />
-        <Badge status="processing" v-else-if="record.userStatus == 1" text="正常" />
+      <template v-if="column.dataIndex === 'status'">
+        <Badge status="default" v-if="record.status == 0" text="未激活" />
+        <Badge status="processing" v-else-if="record.status == 1" text="正常" />
         <Badge status="warning" v-else text="冻结" />
       </template>
     </template>
@@ -33,28 +33,28 @@
   const emit = defineEmits(['change']);
   const userData = reactive([
     {
-      userName: 'lingluo',
+      username: 'lingluo',
       userId: '1560469355556814848',
-      realName: '零落成泥碾作尘',
-      userStatus: 1,
+      realname: '零落成泥碾作尘',
+      status: 1,
     },
     {
-      userName: 'yimiyangguang',
+      username: 'yimiyangguang',
       userId: '1560466276803461120',
-      realName: '一米阳光',
-      userStatus: 1,
+      realname: '一米阳光',
+      status: 1,
     },
     {
-      userName: 'test2',
+      username: 'test2',
       userId: '1559828130000584704',
-      realName: '测试用户2',
-      userStatus: 1,
+      realname: '测试用户2',
+      status: 1,
     },
     {
-      userName: 'zxiaozhou',
+      username: 'zxiaozhou',
       userId: '1444190920879161344',
-      realName: 'zxiaozhou',
-      userStatus: 1,
+      realname: 'zxiaozhou',
+      status: 1,
     },
   ]);
   const selectRows = ref<any[]>([]);
@@ -87,8 +87,8 @@
       props.modelValue.forEach((item: AnYiExtendProperty) => {
         currentSelectRows.push({
           userId: item.value,
-          realName: item.valueDescribe,
-          userName: item.valueExtend,
+          realname: item.valueDescribe,
+          username: item.valueExtend,
         });
         currentSelectRowKey.push(item.value as string);
       });
@@ -104,8 +104,8 @@
       rows.forEach((item: any) => {
         nowData.push({
           value: item.userId,
-          valueDescribe: item.realName,
-          valueExtend: item.userName,
+          valueDescribe: item.realname,
+          valueExtend: item.username,
         });
       });
     }

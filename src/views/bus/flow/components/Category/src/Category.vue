@@ -6,45 +6,23 @@
     @change="functionChange"
     dict="bus_flow_category,name,id"
     pidValue="0"
+    :multiple="false"
     loadTriggleChange
-  >
-  </JTreeSelect>
+  />
 </template>
 
 <script lang="ts" setup>
   import JTreeSelect from '/@/components/Form/src/jeecg/components/JTreeSelect.vue';
-  import { ref, watch } from 'vue';
-  const props = defineProps({
-    modelValue: {
-      type: String,
-    },
-  });
+  import { ref } from 'vue';
+  import { getAuthCache } from '/@/utils/auth';
+  import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
   const emit = defineEmits(['change', 'update:value']);
-  const category = ref<String>();
-  watch(
-    () => props.modelValue,
-    (val1, val2) => {
-      if (val1 != val2) {
-        category.value = props.modelValue;
-      }
-    },
-    { immediate: true }
-  );
-  const options = ref([
-    {
-      label: '测试1label',
-      value: '测试1value',
-    },
-    {
-      label: '测试2label',
-      value: '测试2value',
-    },
-    {
-      label: 'bpmn默认',
-      value: 'http://bpmn.io/schema/bpmn',
-    },
-  ]);
+  let category = ref<String>();
+  const info = getAuthCache(PROCESS_INFO_KEY);
+  console.log(info);
+  category.value = info.category;
   function functionChange(value: any) {
+    console.log(value);
     emit('change', value);
   }
 </script>

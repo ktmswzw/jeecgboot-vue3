@@ -1,6 +1,13 @@
 <template>
   <div class="mt-2">
-    <AnYiBpmnDesignerCamunda @change="handleChange" @save="handleSave" @deployment="handleDeployment" ref="diagramDesigner" :comps="comps" />
+    <AnYiBpmnDesignerCamunda
+      @change="handleChange"
+      @save="handleSave"
+      @deployment="handleDeployment"
+      ref="diagramDesigner"
+      :modelValue="info"
+      :comps="comps"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -16,13 +23,12 @@
   import { CAMUNDA_MODEL } from './process';
   import { getAuthCache } from '/@/utils/auth';
   import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
-  import { useTabs } from '/@/hooks/web/useTabs';
-  import { ProcessInfo } from '/#/store';
-  import { processCreate } from '/@/views/bus/flowTree/category.flow.api';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import {b64toBlob, dataURLtoFile} from '/@/utils';
+  import { duplicateCheck } from '/@/views/system/user/user.api';
+  import {processCreate} from "/@/views/bus/flowTree/category.flow.api";
 
+  let info = ref<Object>;
   const diagramDesigner = ref();
   const comps = {
     category: Category,
@@ -44,33 +50,59 @@
   }
   function handleSave(diagram: BpmnDiagramInfo) {
     console.log('---点击了保存按钮---', diagram);
-  }
-  function handleDeployment(diagram: BpmnDiagramInfo) {
-    console.log('---点击了部署按钮---', diagram);
-    const info = getAuthCache(PROCESS_INFO_KEY);
-    console.log(info)
+    if (!diagram.diagramNames) {
+      notification.info({ message: '请输入名称！' });
+      return;
+    }
+    if (!diagram.processDefinitionKeys) {
+      notification.info({ message: '请输入KEY！' });
+      return;
+    }
+    let params = {
+      tableName: 'ACT_RE_DEPLOYMENT',
+      fieldName: 'NAME_',
+      fieldVal: diagram.diagramNames,
+      dataId: '',
+    };
+    const msg = duplicateCheck(params)
+      .then((res) => {
+        if (!res.success) notification.info({ message: t('bus.flow.duplicateCheckFail', ['名称']) });
+        else console.log(res);
+      })
+      .catch(() => {
+        return false;
+      });
+    console.error(msg);
+    //
+    // const msg2 = duplicateCheckSelf(diagram.processDefinitionKeys, 'KEY_', '');
+    //
+    // console.log(msg2);
+    // t('bus.flow.duplicateCheckFail', label)
     const data = {
       base64: diagram.diagramBase64Data,
       name: diagram.diagramNames,
-      category: info[0],
+      category: diagram.category,
       tenantId: '1',
-      key: diagram.processDefinitionKeys
+      key: diagram.processDefinitionKeys,
     };
-    console.error(data);
+    // console.error(data);
     processCreate(data);
+    // notification.success({ message: t('bus.flow.saveSuccess') });
+  }
+  function handleDeployment(diagram: BpmnDiagramInfo) {
+    console.log('---点击了部署按钮---', diagram);
     notification.success({ message: t('bus.flow.deploymentSuccess') });
   }
 
   function init() {
-
     // 设置标识
     // setTitle(`流程设计`);
     if (!diagramDesigner.value) {
       throw new Error('diagramDesigner is null!');
     }
-    // diagramDesigner.value.createNewDiagram();
-
-    diagramDesigner.value.openBase64Diagram(CAMUNDA_MODEL);
+    diagramDesigner.value.createNewDiagram();
+    info = getAuthCache(PROCESS_INFO_KEY);
+    // diagramDesigner.value.openBase64Diagram(CAMUNDA_MODEL);
   }
 
   onMounted(() => {
