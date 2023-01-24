@@ -1,66 +1,33 @@
 <template>
+  {{ systemDataType }}
   <Table
     :columns="roleColumns"
     :row-selection="{
       onSelect: handleOnSelect,
       selectedRowKeys: selectKeys,
       onSelectAll: handleOnSelectAll,
-      type: systemDataType == 1 ? 'radio' : 'checkbox',
+      type: systemDataType === 1 ? 'radio' : 'checkbox',
     }"
     :customRow="onClick"
-    :data-source="roleData"
+    :data-source="dataSource"
     :rowKey="rowKey"
     bordered
     size="small"
-  >
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'roleStatus'">
-        <Badge status="default" v-if="record.roleStatus == 0" text="禁用" />
-        <Badge status="processing" v-else-if="record.roleStatus == 1" text="启用" />
-      </template>
-    </template>
-  </Table>
+  />
 </template>
 
 <script lang="ts" setup>
-  import { Badge, Table } from 'ant-design-vue';
+  import { Table } from 'ant-design-vue';
   import type { PropType } from 'vue';
-  import { reactive, watch, nextTick, ref, toRaw } from 'vue';
-  import {
-    AnYiExtendInfoArray,
-    AnYiExtendProperty,
-  } from '/@/views/bus/flow/types/designercommon.d';
+  import { getRoleList } from '/@/api/common/api';
+  import { watch, ref, toRaw } from 'vue';
+  import { AnYiExtendProperty } from '/@/views/bus/flow/types/designercommon.d';
   import { roleColumns } from './data';
   const selectRows = ref<any[]>([]);
-  const rowKey = ref('roleId');
+  const rowKey = ref('id');
   const selectKeys = ref<string[]>([]);
   const emit = defineEmits(['change']);
-  const roleData = reactive([
-    {
-      roleId: '1544242595517480960',
-      roleName: '演示',
-      roleStatus: 1,
-      roleCode: 'demo1',
-    },
-    {
-      roleId: '15442425955',
-      roleName: '演示2',
-      roleStatus: 1,
-      roleCode: 'demo22',
-    },
-    {
-      roleId: '1544242560',
-      roleName: '演示3',
-      roleStatus: 1,
-      roleCode: 'demo3333',
-    },
-    {
-      roleId: '1314235356968173568',
-      roleName: '超级管理员',
-      roleStatus: 1,
-      roleCode: 'SUPER_ADMIN',
-    },
-  ]);
+  const dataSource = ref<any[]>([]);
   const props = defineProps({
     modelValue: {
       type: Object as PropType<AnYiExtendProperty[]>,
@@ -88,7 +55,7 @@
       const currentSelectRowKey: string[] = [];
       props.modelValue.forEach((item: AnYiExtendProperty) => {
         currentSelectRows.push({
-          roleId: item.value,
+          id: item.value,
           roleName: item.valueDescribe,
           roleCode: item.valueExtend,
         });
@@ -99,13 +66,19 @@
       selectKeys.value = currentSelectRowKey;
     }
   }
+  function getList() {
+    const params = {};
+    getRoleList(params).then((res) => {
+      dataSource.value = res.records;
+    });
+  }
   function selectionChange() {
     const rows = selectRows.value;
     const nowData: AnYiExtendProperty[] = [];
     if (rows && rows.length > 0) {
       rows.forEach((item: any) => {
         nowData.push({
-          value: item.roleId,
+          value: item.id,
           valueDescribe: item.roleName,
           valueExtend: item.roleCode,
         });
@@ -195,6 +168,7 @@
     }
     selectionChange();
   }
+  getList();
 </script>
 
 <style lang="less">

@@ -20,16 +20,16 @@ export const expressionColumns = [
 
 export const roleColumns = [
   {
+    title: '角色ID',
+    width: 100,
+    dataIndex: 'id',
+  },
+  {
     title: '角色编码',
     dataIndex: 'roleCode',
   },
   {
     title: '角色名称',
     dataIndex: 'roleName',
-  },
-  {
-    title: '角色状态',
-    width: 100,
-    dataIndex: 'roleStatus',
   },
 ];

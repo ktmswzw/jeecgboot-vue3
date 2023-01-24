@@ -5,7 +5,6 @@
       @save="handleSave"
       @deployment="handleDeployment"
       ref="diagramDesigner"
-      :modelValue="info"
       :comps="comps"
     />
   </div>

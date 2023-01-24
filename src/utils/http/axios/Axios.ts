@@ -10,7 +10,6 @@ import { ContentTypeEnum } from '/@/enums/httpEnum';
 import { RequestEnum } from '/@/enums/httpEnum';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
-import {bool} from "vue-types";
 
 const { createMessage } = useMessage();
 export * from './axiosTransform';
@@ -256,7 +255,6 @@ export class VAxios {
     });
   }
 
-
   /**
    * 【用于评论功能】自定义文件上传-请求
    * @param url
@@ -264,16 +262,15 @@ export class VAxios {
    */
   uploadMyFile<T = any>(url, formData) {
     const glob = useGlobSetting();
-    return this.axiosInstance
-      .request<T>({
-        url: url,
-        baseURL: glob.uploadUrl,
-        method: 'POST',
-        data: formData,
-        headers: {
-          'Content-type': ContentTypeEnum.FORM_DATA,
-          ignoreCancelToken: true,
-        },
-      });
+    return this.axiosInstance.request<T>({
+      url: url,
+      baseURL: glob.uploadUrl,
+      method: 'POST',
+      data: formData,
+      headers: {
+        'Content-type': ContentTypeEnum.FORM_DATA,
+        ignoreCancelToken: true,
+      },
+    });
   }
 }

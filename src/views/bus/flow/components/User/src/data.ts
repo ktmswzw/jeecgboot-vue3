@@ -20,7 +20,7 @@ export const expressionColumns = [
 
 export const columns = [
   {
-    title: '用户账号2',
+    title: '用户账号',
     dataIndex: 'username',
   },
   {

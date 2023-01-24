@@ -8,55 +8,25 @@
       type: systemDataType == 1 ? 'radio' : 'checkbox',
     }"
     :customRow="onClick"
-    :data-source="userData"
+    :data-source="dataSource"
     :rowKey="rowKey"
     bordered
     size="small"
   >
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.dataIndex === 'status'">
-        <Badge status="default" v-if="record.status == 0" text="未激活" />
-        <Badge status="processing" v-else-if="record.status == 1" text="正常" />
-        <Badge status="warning" v-else text="冻结" />
-      </template>
-    </template>
   </Table>
 </template>
 
 <script lang="ts" setup>
   import { Badge, Table } from 'ant-design-vue';
   import type { PropType } from 'vue';
-  import { reactive, watch, ref, toRaw } from 'vue';
+  import { watch, ref, toRaw } from 'vue';
   import { AnYiExtendProperty } from '/@/views/bus/flow/types/designercommon.d';
   import { columns } from './data';
-  const rowKey = ref('userId');
+  const rowKey = ref('id');
   const emit = defineEmits(['change']);
-  const userData = reactive([
-    {
-      username: 'lingluo',
-      userId: '1560469355556814848',
-      realname: '零落成泥碾作尘',
-      status: 1,
-    },
-    {
-      username: 'yimiyangguang',
-      userId: '1560466276803461120',
-      realname: '一米阳光',
-      status: 1,
-    },
-    {
-      username: 'test2',
-      userId: '1559828130000584704',
-      realname: '测试用户2',
-      status: 1,
-    },
-    {
-      username: 'zxiaozhou',
-      userId: '1444190920879161344',
-      realname: 'zxiaozhou',
-      status: 1,
-    },
-  ]);
+
+  import { getUserList } from '/@/api/common/api';
+  const dataSource = ref<any[]>([]);
   const selectRows = ref<any[]>([]);
   const selectKeys = ref<string[]>([]);
   const props = defineProps({
@@ -78,6 +48,12 @@
     },
     { immediate: true }
   );
+  function getList() {
+    const params = {};
+    getUserList(params).then((res) => {
+      dataSource.value = res.records;
+    });
+  }
   function initData() {
     selectRows.value = [];
     selectKeys.value = [];
@@ -86,7 +62,7 @@
       const currentSelectRowKey: string[] = [];
       props.modelValue.forEach((item: AnYiExtendProperty) => {
         currentSelectRows.push({
-          userId: item.value,
+          id: item.value,
           realname: item.valueDescribe,
           username: item.valueExtend,
         });
@@ -103,7 +79,7 @@
     if (rows && rows.length > 0) {
       rows.forEach((item: any) => {
         nowData.push({
-          value: item.userId,
+          value: item.id,
           valueDescribe: item.realname,
           valueExtend: item.username,
         });
@@ -193,6 +169,7 @@
     }
     selectionChange();
   }
+  getList();
 </script>
 
 <style lang="less">
