@@ -3,6 +3,7 @@
     <AnYiBpmnDesignerCamunda
       @change="handleChange"
       @save="handleSave"
+      :show-deployment="false"
       @deployment="handleDeployment"
       ref="diagramDesigner"
       :comps="comps"
@@ -27,8 +28,8 @@
   import { duplicateCheck } from '/@/views/system/user/user.api';
   import {processCreate} from "/@/views/bus/flowTree/category.flow.api";
 
-  let info = ref<Object>;
   const diagramDesigner = ref();
+  const record = ref();
   const comps = {
     category: Category,
     followUpDate: Time,
@@ -57,13 +58,15 @@
       notification.info({ message: '请输入KEY！' });
       return;
     }
+    record.value = getAuthCache(PROCESS_INFO_KEY);
+    const id = record.value ? record.value.id : '';
     let params = {
       tableName: 'ACT_RE_DEPLOYMENT',
       fieldName: 'NAME_',
       fieldVal: diagram.diagramNames,
-      dataId: '',
+      dataId: id,
     };
-    const msg = duplicateCheck(params)
+    duplicateCheck(params)
       .then((res) => {
         if (!res.success) notification.info({ message: t('bus.flow.duplicateCheckFail', ['名称']) });
         else console.log(res);
@@ -71,22 +74,36 @@
       .catch(() => {
         return false;
       });
-    console.error(msg);
-    //
-    // const msg2 = duplicateCheckSelf(diagram.processDefinitionKeys, 'KEY_', '');
-    //
-    // console.log(msg2);
-    // t('bus.flow.duplicateCheckFail', label)
+    params = {
+      tableName: 'ACT_RE_DEPLOYMENT',
+      fieldName: 'KEY_',
+      fieldVal: diagram.processDefinitionKeys,
+      dataId: id,
+    };
+    duplicateCheck(params)
+      .then((res) => {
+        if (!res.success) notification.info({ message: t('bus.flow.duplicateCheckFail', ['KEY']) });
+        else console.log(res);
+      })
+      .catch(() => {
+        return false;
+      });
+
+    const info = getAuthCache(PROCESS_INFO_KEY);
     const data = {
       base64: diagram.diagramBase64Data,
       name: diagram.diagramNames,
-      category: diagram.category,
+      category: info.category,
       tenantId: '1',
       key: diagram.processDefinitionKeys,
+      id: id,
     };
     // console.error(data);
-    processCreate(data);
-    // notification.success({ message: t('bus.flow.saveSuccess') });
+    processCreate(data).then((res) => {
+      console.log(res);
+      record.value = res.result;
+    });
+    notification.success({ message: t('bus.flow.saveSuccess') });
   }
   function handleDeployment(diagram: BpmnDiagramInfo) {
     console.log('---点击了部署按钮---', diagram);
@@ -100,7 +117,6 @@
       throw new Error('diagramDesigner is null!');
     }
     diagramDesigner.value.createNewDiagram();
-    info = getAuthCache(PROCESS_INFO_KEY);
     // diagramDesigner.value.openBase64Diagram(CAMUNDA_MODEL);
   }
 

@@ -22,11 +22,11 @@ export const columns: BasicColumn[] = [
   //   align: 'center',
   //   dataIndex: 'tenantId',
   // },
-  {
-    title: '描述',
-    align: 'center',
-    dataIndex: 'description',
-  },
+  // {
+  //   title: '描述',
+  //   align: 'center',
+  //   dataIndex: 'description',
+  // },
   {
     title: '版本',
     align: 'center',

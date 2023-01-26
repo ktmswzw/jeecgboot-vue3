@@ -33,7 +33,7 @@
   import { processList, deployList, startProcess } from './category.flow.api';
   import { columns, searchFormSchema } from './process.data';
   import { setAuthCache } from '/@/utils/auth';
-  import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
+  import { DEPLOY_INFO, PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
   import { useGo } from '/@/hooks/web/usePage';
   import { deleteOne, getExportUrl, getImportUrl } from '/@/views/bus/alert/BusEventAlert.api';
 
@@ -109,7 +109,9 @@
   }
 
   // 编辑用户信息
-  function editUserInfo() {
+  function editInfo(record) {
+    console.log(record);
+    setAuthCache(DEPLOY_INFO, record);
     go(`/bpmn/index`);
   }
 
@@ -175,7 +177,7 @@
   function getTableAction(record): ActionItem[] {
     return [
       { label: '发起', onClick: startProcessMe.bind(null, record) },
-      { label: '部署', onClick: editUserInfo.bind(null, record) },
+      { label: '编辑', onClick: editInfo.bind(null, record) },
     ];
   }
 </script>
