@@ -18,6 +18,8 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import ProcessList from './ProcessList.vue';
   import FlowTree from './components/FlowTree.vue';
+  import { setAuthCache } from '/@/utils/auth';
+  import { DEPLOY_INFO, PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
 
   const { prefixCls } = useDesign('flow-tree');
   provide('prefixCls', prefixCls);
@@ -29,6 +31,8 @@
   function onTreeSelect(data) {
     treeData.value = data;
   }
+  setAuthCache(DEPLOY_INFO, {});
+  // setAuthCache(PROCESS_INFO_KEY, {});
 </script>
 
 <style lang="less">

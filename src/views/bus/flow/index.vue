@@ -10,26 +10,29 @@
     />
   </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="flow-index">
   import { onMounted } from 'vue';
   import { Category } from './components/Category';
   import { Role } from './components/Role';
   import { User } from './components/User';
   import { Time } from './components/Time';
+  import { bpmn2 } from './process';
   import type { BpmnDiagramInfo } from '/@/views/bus/flow/types/designercommon.d';
   import { UserSingle } from './components/UserSingle';
   import { Expression } from './components/Expression';
   import { ref } from 'vue';
-  import { CAMUNDA_MODEL } from './process';
-  import { getAuthCache } from '/@/utils/auth';
-  import { PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
+  import { getAuthCache, setAuthCache } from '/@/utils/auth';
+  import { DEPLOY_INFO, PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { duplicateCheck } from '/@/views/system/user/user.api';
-  import {processCreate} from "/@/views/bus/flowTree/category.flow.api";
+  import { processCreate, processXml } from '/@/views/bus/flowTree/category.flow.api';
 
   const diagramDesigner = ref();
   const record = ref();
+  const isNameCheck = ref(true);
+  const isKeyCheck = ref(true);
+  let info = ref({ category: '' });
   const comps = {
     category: Category,
     followUpDate: Time,
@@ -47,29 +50,20 @@
   const { notification } = useMessage();
   function handleChange(diagram: BpmnDiagramInfo) {
     console.log('--模型发生了变更----', diagram);
-  }
-  function handleSave(diagram: BpmnDiagramInfo) {
-    console.log('---点击了保存按钮---', diagram);
-    if (!diagram.diagramNames) {
-      notification.info({ message: '请输入名称！' });
-      return;
-    }
-    if (!diagram.processDefinitionKeys) {
-      notification.info({ message: '请输入KEY！' });
-      return;
-    }
-    record.value = getAuthCache(PROCESS_INFO_KEY);
-    const id = record.value ? record.value.id : '';
+    const id = record.value ? record.value.deploymentId : '';
     let params = {
       tableName: 'ACT_RE_DEPLOYMENT',
       fieldName: 'NAME_',
+      idName: 'ID_',
       fieldVal: diagram.diagramNames,
       dataId: id,
     };
     duplicateCheck(params)
       .then((res) => {
-        if (!res.success) notification.info({ message: t('bus.flow.duplicateCheckFail', ['名称']) });
-        else console.log(res);
+        if (!res.success) {
+          notification.info({ message: t('bus.flow.duplicateCheckFail', ['名称']) })
+          isNameCheck.value = false;
+        };
       })
       .catch(() => {
         return false;
@@ -77,31 +71,54 @@
     params = {
       tableName: 'ACT_RE_DEPLOYMENT',
       fieldName: 'KEY_',
+      idName: 'ID_',
       fieldVal: diagram.processDefinitionKeys,
       dataId: id,
     };
     duplicateCheck(params)
       .then((res) => {
-        if (!res.success) notification.info({ message: t('bus.flow.duplicateCheckFail', ['KEY']) });
-        else console.log(res);
+        if (!res.success) {
+          notification.info({ message: t('bus.flow.duplicateCheckFail', ['KEY']) })
+          isKeyCheck.value = false;
+        };
       })
       .catch(() => {
         return false;
       });
-
-    const info = getAuthCache(PROCESS_INFO_KEY);
+  }
+  function handleSave(diagram: BpmnDiagramInfo) {
+    console.log('---点击了保存按钮---', diagram);
+    if (!diagram.diagramNames) {
+      notification.info({ message: '请输入名称！' });
+      return;
+    }
+    if (!isNameCheck) {
+      notification.info({ message: '名称重复！' });
+      return;
+    }
+    if (!diagram.processDefinitionKeys) {
+      notification.info({ message: '请输入KEY！' });
+      return;
+    }
+    if (!isKeyCheck) {
+      notification.info({ message: 'Key重复！' });
+      return;
+    }
+    const id = record.value ? record.value.id : '';
     const data = {
       base64: diagram.diagramBase64Data,
       name: diagram.diagramNames,
-      category: info.category,
+      category: info.value.category,
       tenantId: '1',
       key: diagram.processDefinitionKeys,
       id: id,
+      deploymentId: record.value.deploymentId,
     };
     // console.error(data);
     processCreate(data).then((res) => {
+      console.log("=-------------");
       console.log(res);
-      record.value = res.result;
+      record.value.deploymentId = res.id;
     });
     notification.success({ message: t('bus.flow.saveSuccess') });
   }
@@ -116,8 +133,18 @@
     if (!diagramDesigner.value) {
       throw new Error('diagramDesigner is null!');
     }
-    diagramDesigner.value.createNewDiagram();
-    // diagramDesigner.value.openBase64Diagram(CAMUNDA_MODEL);
+    record.value = getAuthCache(DEPLOY_INFO);
+    console.log(record)
+    info.value = getAuthCache(PROCESS_INFO_KEY);
+    if(record.value.id){
+      processXml({id:record.value.id}).then((res)=>{
+        // console.log(res)
+        diagramDesigner.value.openBase64Diagram(res);
+      })
+      // diagramDesigner.value.createNewDiagram(bpmn2);
+    }
+    else
+      diagramDesigner.value.createNewDiagram();
   }
 
   onMounted(() => {

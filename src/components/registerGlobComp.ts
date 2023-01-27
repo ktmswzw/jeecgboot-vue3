@@ -2,20 +2,23 @@ import type { App } from 'vue';
 import { Icon } from './Icon';
 import AIcon from '/@/components/jeecg/AIcon.vue';
 import { Button, JUploadButton } from './Button';
-import AnYiProcessEE from 'anyi-process-ee-antvue';
 
-import 'anyi-process-ee-antvue/dist/style.css';
-import 'bpmn-js-color-picker/colors/color-picker.css';
+import AnYiProcessEE from 'anyi-process-ee-antvue';
 
 import '/@/assets/bpmn/bpmn-font/css/bpmn.css';
 import '/@/assets/bpmn/bpmn-font/css/bpmn-codes.css';
 import '/@/assets/bpmn/bpmn-font/css/bpmn-embedded.css';
 import '/@/assets/bpmn/bpmn-js.css';
+
 import '/@/assets/bpmn/diagram-js.css';
 import '/@/assets/bpmn/properties-panel.css';
 import '/@/assets/bpmn/bpmn-js-token-simulation.css';
 import '/@/assets/bpmn/diagram-js-minimap.css';
 import '/@/assets/bpmn/bpmn-js-bpmnlint.css';
+
+import 'anyi-process-ee-antvue/dist/style.css';
+import 'ant-design-vue/dist/antd.less';
+import 'bpmn-js-color-picker/colors/color-picker.css';
 
 import {
   // Need

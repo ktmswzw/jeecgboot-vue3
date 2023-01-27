@@ -23,21 +23,18 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, inject, ref, unref, watch } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import { ActionItem, BasicTable, TableAction } from '/@/components/Table';
-  import { useModal } from '/@/components/Modal';
   import { useDrawer } from '/@/components/Drawer';
   import { useListPage } from '/@/hooks/system/useListPage';
 
   import ProcessDrawer from './components/ProcessDrawer.vue';
-  import { processList, deployList, startProcess } from './category.flow.api';
-  import { columns, searchFormSchema } from './process.data';
+  import { processList, startProcess, deleteOne } from './category.flow.api';
+  import { columns } from './process.data';
   import { setAuthCache } from '/@/utils/auth';
   import { DEPLOY_INFO, PROCESS_INFO_KEY } from '/@/enums/cacheEnum';
   import { useGo } from '/@/hooks/web/usePage';
-  import { deleteOne, getExportUrl, getImportUrl } from '/@/views/bus/alert/BusEventAlert.api';
 
-  const prefixCls = inject('prefixCls');
   const props = defineProps({
     data: { require: true, type: Object },
   });
@@ -46,9 +43,9 @@
   const registerModal = ref();
   const queryParam = ref<any>({});
   // 列表页面公共参数、方法
-  const { tableContext, createMessage, onExportXls, onImportXls } = useListPage({
+  const { tableContext, createMessage } = useListPage({
     tableProps: {
-      api: deployList,
+      api: processList,
       columns,
       canResize: false,
       useSearchForm: false,
@@ -63,14 +60,6 @@
         return Object.assign(params, queryParam.value);
       },
     },
-    exportConfig: {
-      name: '预警清单',
-      url: getExportUrl,
-    },
-    importConfig: {
-      url: getImportUrl,
-      success: handleSuccess,
-    },
   });
 
   // 注册 ListTable
@@ -83,11 +72,6 @@
   //注册drawer
   const [registerDrawer, { openDrawer, setDrawerProps }] = useDrawer();
 
-  // 清空选择的行
-  function clearSelection() {
-    selectedRowKeys.value = [];
-  }
-
   // 创建用户
   function createProcess() {
     if (!treeID.value) {
@@ -98,19 +82,11 @@
       };
       setAuthCache(PROCESS_INFO_KEY, values);
       go(`/bpmn/index`);
-      // openDrawer(true, {
-      //   isUpdate: false,
-      //   departDisabled: true,
-      //   record: {
-      //     category: treeID.value,
-      //   },
-      // });
     }
   }
 
   // 编辑用户信息
   function editInfo(record) {
-    console.log(record);
     setAuthCache(DEPLOY_INFO, record);
     go(`/bpmn/index`);
   }
@@ -121,15 +97,6 @@
     }).then((res) => {
       console.log(res);
     });
-  }
-
-  /**
-   * 用户抽屉表单成功回调
-   */
-  function onUserDrawerSuccess({ isUpdate, values }) {
-    // setAuthCache(PROCESS_INFO_KEY, values);
-    // go(`/bpmn/index`);
-    isUpdate ? updateTableDataRecord(values.id, values) : reload();
   }
 
   /**
@@ -148,11 +115,20 @@
   }
 
   /**
+   * 用户抽屉表单成功回调
+   */
+  function onUserDrawerSuccess({ isUpdate, values }) {
+    // setAuthCache(PROCESS_INFO_KEY, values);
+    // go(`/bpmn/index`);
+    isUpdate ? updateTableDataRecord(values.id, values) : reload();
+  }
+  /**
    * 删除事件
    */
   async function handleDelete(record) {
-    await deleteOne({ id: record.id }, handleSuccess);
+    await deleteOne({ id: record.deploymentId }, handleSuccess);
   }
+
   /**
    * 下拉操作栏
    */
