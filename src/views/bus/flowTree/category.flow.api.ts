@@ -16,6 +16,7 @@ export const queryTreeList = (params?) => defHttp.get({ url: Api.treeList, param
 export const processList = (params?) => defHttp.get({ url: Api.processList, params });
 export const processXml = (params?) => defHttp.get({ url: Api.processXml, params });
 export const deleteOne = (params, handleSuccess) => {
+  console.log(params);
   Modal.confirm({
     title: '确认删除',
     content: '是否删除选中数据',

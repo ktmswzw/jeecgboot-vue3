@@ -3,8 +3,8 @@
   <BasicTable @register="registerTable" :rowSelection="rowSelection">
     <!--插槽:table标题-->
     <template #tableTitle>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createProcess">新建流程</a-button>
-      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="startProcessMe">测试发起</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="createProcess">新建</a-button>
+      <a-button type="primary" preIcon="ant-design:plus-outlined" @click="handleSuccess">刷新</a-button>
       <template v-if="selectedRowKeys.length > 0">
         <a-dropdown>
           <a-button>
@@ -93,7 +93,7 @@
 
   async function startProcessMe(record) {
     await startProcess({
-      id: record,
+      key: record.key,
     }).then((res) => {
       console.log(res);
     });
