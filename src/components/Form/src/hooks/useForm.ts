@@ -93,11 +93,14 @@ export function useForm(props?: Props): UseFormReturnType {
     // TODO promisify
     getFieldsValue: <T>() => {
       //update-begin-author:taoyan date:2022-7-5 for: VUEN-1341【流程】编码方式 流程节点编辑表单时，填写数据报错 包括用户组件、部门组件、省市区
-      let values = unref(formRef)?.getFieldsValue() as T;
-      if(values){
-        Object.keys(values).map(key=>{
+      const values = unref(formRef)?.getFieldsValue() as T;
+      if (values) {
+        Object.keys(values).map((key) => {
           if (values[key] instanceof Array) {
-            values[key] = values[key].join(',');
+            const isObject = typeof (values[key][0] || '') === 'object';
+            if (!isObject) {
+              values[key] = values[key].join(',');
+            }
           }
         });
       }
