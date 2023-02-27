@@ -151,3 +151,10 @@
     init();
   });
 </script>
+
+<!--<style lang="less" scoped>-->
+<!--html[data-theme='dark'] .djs-palette{-->
+<!--  color: #c9d1d9;-->
+<!--  background: #000;-->
+<!--}-->
+<!--</style>-->

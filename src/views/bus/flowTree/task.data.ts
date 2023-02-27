@@ -26,11 +26,13 @@ export const columns: BasicColumn[] = [
     title: '发起人',
     align: 'center',
     dataIndex: 'originalAssignee',
+    width: 80,
   },
   {
     title: '处理人',
     align: 'center',
     dataIndex: 'owner',
+    width: 80,
   },
 ];
 

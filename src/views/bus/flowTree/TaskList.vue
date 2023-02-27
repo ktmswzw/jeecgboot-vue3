@@ -68,6 +68,7 @@
     </BasicTable>
     <!-- 表单区域 -->
     <TaskModal ref="registerModal" @success="handleSuccess" />
+    <FlowView ref="flowModal" @success="handleSuccess" />
   </div>
 </template>
 
@@ -79,12 +80,14 @@
   import { taskList, deleteOne, getExportUrl } from './task.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import TaskModal from './components/TaskModal.vue';
+  import FlowView from './components/FlowView.vue';
   import JDictSelectTag from '/@/components/Form/src/jeecg/components/JDictSelectTag.vue';
   const queryParam = ref<any>({});
   const toggleSearchStatus = ref<boolean>(false);
   const registerModal = ref();
+  const flowModal = ref();
   //注册table数据
-  const { tableContext, onExportXls, onImportXls } = useListPage({
+  const { tableContext, onExportXls } = useListPage({
     tableProps: {
       title: '任务清单',
       api: taskList,
@@ -92,7 +95,7 @@
       canResize: false,
       useSearchForm: false,
       actionColumn: {
-        width: 120,
+        width: 160,
         fixed: 'right',
       },
       beforeFetch: (params) => {
@@ -115,14 +118,6 @@
   });
 
   /**
-   * 新增事件
-   */
-  function handleAdd() {
-    registerModal.value.disableSubmit = false;
-    registerModal.value.add();
-  }
-
-  /**
    * 编辑事件
    */
   function handleEdit(record: Recordable) {
@@ -131,11 +126,11 @@
   }
 
   /**
-   * 详情
+   * 查看流程
    */
-  function handleDetail(record: Recordable) {
-    registerModal.value.disableSubmit = true;
-    registerModal.value.edit(record);
+  function flowView(record: Recordable) {
+    flowModal.value.disableSubmit = false;
+    flowModal.value.edit(record);
   }
 
   /**
@@ -161,6 +156,10 @@
         label: '编辑',
         onClick: handleEdit.bind(null, record),
       },
+      {
+        label: '流程',
+        onClick: flowView.bind(null, record),
+      },
     ];
   }
 
@@ -169,10 +168,6 @@
    */
   function getDropDownAction(record) {
     return [
-      {
-        label: '详情',
-        onClick: handleDetail.bind(null, record),
-      },
       {
         label: '删除',
         popConfirm: {

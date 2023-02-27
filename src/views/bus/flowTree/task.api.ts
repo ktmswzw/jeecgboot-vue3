@@ -6,6 +6,7 @@ enum Api {
   taskCheck = '/task/complete',
   deployDelete = '/task/deleteAll',
   exportXls = '/flowable/exportXls',
+  getProcessImage = '/flowable/getProcessImage',
 }
 
 export const getExportUrl = Api.exportXls;
@@ -23,7 +24,10 @@ export const deleteOne = (params, handleSuccess) => {
     },
   });
 };
+export const getProcessImage = (params?) => defHttp.get({ url: Api.getProcessImage, params });
+
 export const taskList = (params?) => defHttp.get({ url: Api.taskList, params });
+
 export const taskCheck = (params?) => {
   return defHttp.post({ url: Api.taskCheck, params });
 };

@@ -16,8 +16,8 @@ import '/@/assets/bpmn/bpmn-js-token-simulation.css';
 import '/@/assets/bpmn/diagram-js-minimap.css';
 import '/@/assets/bpmn/bpmn-js-bpmnlint.css';
 
-import 'anyi-process-ee-antvue/dist/style.css';
-import 'ant-design-vue/dist/antd.less';
+// import 'anyi-process-ee-antvue/dist/style.css';
+import '/@/assets/bpmn/anyi-process-ee-antvue.css';
 import 'bpmn-js-color-picker/colors/color-picker.css';
 
 import {
