@@ -101,5 +101,12 @@ export default {
     mobile: '手机号码',
 
     subTitleText: '{0}秒后返回登录页面',
+
+    //重置密码页面中文
+    authentication:'验证身份',
+    resetLoginPassword:'重置登录密码',
+    resetSuccess:'重置成功',
+    nextStep:'下一步',
+    goToLogin:'去登录'
   },
 };

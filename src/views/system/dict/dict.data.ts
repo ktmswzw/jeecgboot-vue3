@@ -10,7 +10,7 @@ export const columns: BasicColumn[] = [
     width: 240,
   },
   {
-    title: '字典编号',
+    title: '字典编码',
     dataIndex: 'dictCode',
     width: 240,
   },
@@ -28,7 +28,7 @@ export const recycleBincolumns: BasicColumn[] = [
     width: 120,
   },
   {
-    title: '字典编号',
+    title: '字典编码',
     dataIndex: 'dictCode',
     width: 120,
   },

@@ -13,6 +13,7 @@
     v-bind="attrs"
     @change="onChange"
     @search="onSearch"
+    :tree-checkable="treeCheckAble"
   >
   </a-tree-select>
 </template>
@@ -52,6 +53,10 @@
     url: propTypes.string.def(''),
     params: propTypes.object.def({}),
     //update-end-author:taoyan date:2022-11-8 for: issues/4173 Online JTreeSelect控件changeOptions方法未生效
+    //update-begin---author:wangshuai date: 20230202 for: 新增是否有复选框
+    //默认没有选择框
+    treeCheckAble: propTypes.bool.def(false),
+    //update-end---author:wangshuai date: 20230202 for: 新增是否有复选框
   });
   const attrs = useAttrs();
   const emit = defineEmits(['change', 'update:value']);
