@@ -139,7 +139,7 @@ const transform: AxiosTransform = {
   requestInterceptors: (config: Recordable, options) => {
     // 请求之前处理config
     const token = getToken();
-    let tenantid = getTenantId();
+    let tenantId = getTenantId();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
       config.headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
@@ -153,10 +153,10 @@ const transform: AxiosTransform = {
       config.headers[ConfigEnum.Sign] = signMd5Utils.getSign(config.url, config.params);
       //--update-end--author:liusq---date:20210831---for:将签名和时间戳，添加在请求接口 Header
       //--update-begin--author:liusq---date:20211105---for: for:将多租户id，添加在请求接口 Header
-      if (!tenantid) {
-        tenantid = 0;
+      if (!tenantId) {
+        tenantId = 0;
       }
-      config.headers[ConfigEnum.TENANT_ID] = tenantid;
+      config.headers[ConfigEnum.TENANT_ID] = tenantId;
       //--update-begin--author:liusq---date:20220325---for: 增加vue3标记
       config.headers[ConfigEnum.VERSION] = 'v3';
       //--update-end--author:liusq---date:20220325---for:增加vue3标记

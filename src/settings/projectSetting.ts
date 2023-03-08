@@ -71,7 +71,7 @@ const setting: ProjectConfig = {
     // 是否显示顶部
     show: true,
     // 主题
-    theme: ThemeEnum.LIGHT,
+    theme: ThemeEnum.DARK,
     // 开启锁屏功能
     useLockPage: true,
     // 显示全屏按钮
@@ -104,9 +104,9 @@ const setting: ProjectConfig = {
     // 菜单宽度
     menuWidth: 210,
     // 菜单模式
-    mode: MenuModeEnum.INLINE,
+    mode: MenuModeEnum.HORIZONTAL,
     // 菜单类型
-    type: MenuTypeEnum.SIDEBAR,
+    type: MenuTypeEnum.TOP_MENU,
     // 菜单主题
     theme: ThemeEnum.DARK,
     // 分割菜单
@@ -130,7 +130,7 @@ const setting: ProjectConfig = {
     // 刷新后是否保留已经打开的标签页
     cache: false,
     // 开启
-    show: true,
+    show: false,
     // 是否可以拖拽
     canDrag: true,
     // 开启快速操作
@@ -150,7 +150,7 @@ const setting: ProjectConfig = {
     enable: true,
 
     // 动画名 Route basic switching animation
-    basicTransition: RouterTransitionEnum.FADE_SIDE,
+    basicTransition: RouterTransitionEnum.FADE_BOTTOM,
 
     // 是否打开页面切换loading
     // Only open when enable=true

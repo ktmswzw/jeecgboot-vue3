@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID } from '/@/enums/cacheEnum';
+import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID, DB_CATEGORY_DATA_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, ThirdLoginParams } from '/@/api/sys/model/userModel';
 import { doLogout, loginApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
@@ -23,9 +23,10 @@ interface UserState {
   token?: string;
   roleList: RoleEnum[];
   dictItems?: [];
+  categoryItems?: [];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
-  tenantid?: string | number;
+  tenantId?: string | number;
   loginInfo?: Nullable<LoginInfo>;
 }
 
@@ -40,12 +41,13 @@ export const useUserStore = defineStore({
     roleList: [],
     // 字典
     dictItems: [],
+    categoryItems: [],
     // session过期时间
     sessionTimeout: false,
     // Last fetch time
     lastUpdateTime: 0,
     //租户id
-    tenantid: '',
+    tenantId: '',
     //登录返回信息
     loginInfo: null,
   }),
@@ -72,7 +74,7 @@ export const useUserStore = defineStore({
       return this.lastUpdateTime;
     },
     getTenant(): string | number {
-      return this.tenantid || getAuthCache<string | number>(TENANT_ID);
+      return this.tenantId || getAuthCache<string | number>(TENANT_ID);
     },
   },
   actions: {
@@ -97,8 +99,12 @@ export const useUserStore = defineStore({
       this.dictItems = dictItems;
       setAuthCache(DB_DICT_DATA_KEY, dictItems);
     },
+    setAllCategoryItems(categoryItems) {
+      this.categoryItems = categoryItems;
+      setAuthCache(DB_CATEGORY_DATA_KEY, categoryItems);
+    },
     setTenant(id) {
-      this.tenantid = id;
+      this.tenantId = id;
       setAuthCache(TENANT_ID, id);
     },
     setSessionTimeout(flag: boolean) {
@@ -107,6 +113,7 @@ export const useUserStore = defineStore({
     resetState() {
       this.userInfo = null;
       this.dictItems = [];
+      this.categoryItems = [];
       this.token = '';
       this.roleList = [];
       this.sessionTimeout = false;
@@ -152,7 +159,8 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean, data?: any): Promise<any | null> {
       if (!this.getToken) return null;
       //获取用户信息
-      const userInfo = await this.getUserInfoAction(data.userInfo, data.sysAllDictItems);
+      const userInfo = await this.getUserInfoAction(data.userInfo, data.sysAllDictItems, data.sysAllCategoryItems.data);
+      // const userInfo = await this.getUserInfoAction(data.userInfo, data.sysAllDictItems);
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -198,13 +206,13 @@ export const useUserStore = defineStore({
     /**
      * 获取用户信息
      */
-    async getUserInfoAction(userInfo, sysAllDictItems): Promise<UserInfo | null> {
+    async getUserInfoAction(userInfo, sysAllDictItems, categoryItems): Promise<UserInfo | null> {
       if (!this.getToken) {
         return null;
       }
-      // const { userInfo, sysAllDictItems } = await getUserInfo();
       if (userInfo) {
         const { roles = [] } = userInfo;
+        console.error(roles);
         if (isArray(roles)) {
           const roleList = roles.map((item) => item.value) as RoleEnum[];
           this.setRoleList(roleList);
@@ -212,6 +220,7 @@ export const useUserStore = defineStore({
           userInfo.roles = [];
           this.setRoleList([]);
         }
+        this.setTenant(userInfo.relTenantIds);
         this.setUserInfo(userInfo);
       }
       /**
@@ -221,6 +230,9 @@ export const useUserStore = defineStore({
        */
       if (sysAllDictItems) {
         this.setAllDictItems(sysAllDictItems);
+      }
+      if (categoryItems) {
+        this.setAllCategoryItems(categoryItems);
       }
       return userInfo;
     },
