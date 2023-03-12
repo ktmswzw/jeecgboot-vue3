@@ -18,7 +18,7 @@ import {
   TENANT_ID,
   LOGIN_INFO_KEY,
   PROCESS_INFO_KEY,
-  DEPLOY_INFO,
+  DEPLOY_INFO, LOGIN_CUSTOM_FLAG,
 } from '/@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 import { toRaw } from 'vue';
@@ -35,6 +35,7 @@ interface BasicStore {
   [DB_CATEGORY_DATA_KEY]: string;
   [TENANT_ID]: string;
   [PROCESS_INFO_KEY]: ProcessInfo;
+  [LOGIN_CUSTOM_FLAG]: boolean;
   [DEPLOY_INFO]: ProcessInfo;
   [LOGIN_INFO_KEY]: LoginInfo;
 }

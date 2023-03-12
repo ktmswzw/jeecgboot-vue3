@@ -32,6 +32,8 @@ export const TENANT_ID = 'TENANT_ID';
 // login info key
 export const LOGIN_INFO_KEY = 'LOGIN__INFO__';
 
+export const LOGIN_CUSTOM_FLAG = 'LOGIN__CUSTOM__FLAG__';
+
 export const PROCESS_INFO_KEY = 'PROCESS__INFO__KEY';
 export const DEPLOY_INFO = 'DEPLOY__INFO__';
 

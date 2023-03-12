@@ -1,10 +1,19 @@
-import type { UserInfo, LoginInfo } from '/#/store';
+import type { LoginInfo, UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, LOGIN_INFO_KEY, DB_DICT_DATA_KEY, TENANT_ID, DB_CATEGORY_DATA_KEY } from '/@/enums/cacheEnum';
+import {
+  DB_CATEGORY_DATA_KEY,
+  DB_DICT_DATA_KEY,
+  LOGIN_CUSTOM_FLAG,
+  LOGIN_INFO_KEY,
+  ROLES_KEY,
+  TENANT_ID,
+  TOKEN_KEY,
+  USER_INFO_KEY,
+} from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
 import { GetUserInfoModel, LoginParams, ThirdLoginParams } from '/@/api/sys/model/userModel';
 import { doLogout, loginApi, phoneLoginApi, thirdLogin } from '/@/api/sys/user';
@@ -18,6 +27,7 @@ import { isArray } from '/@/utils/is';
 import { useGlobSetting } from '/@/hooks/setting';
 import { JDragConfigEnum } from '/@/enums/jeecgEnum';
 import { useSso } from '/@/hooks/web/useSso';
+
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
@@ -25,6 +35,7 @@ interface UserState {
   dictItems?: [];
   categoryItems?: [];
   sessionTimeout?: boolean;
+  customLogin?: boolean;
   lastUpdateTime: number;
   tenantId?: string | number;
   loginInfo?: Nullable<LoginInfo>;
@@ -50,10 +61,14 @@ export const useUserStore = defineStore({
     tenantId: '',
     //登录返回信息
     loginInfo: null,
+    customLogin: false,
   }),
   getters: {
     getUserInfo(): UserInfo {
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
+    },
+    getCustomLogin(): boolean {
+      return this.customLogin || getAuthCache<boolean>(LOGIN_CUSTOM_FLAG) || false;
     },
     getLoginInfo(): LoginInfo {
       return this.loginInfo || getAuthCache<LoginInfo>(LOGIN_INFO_KEY) || {};
@@ -85,6 +100,10 @@ export const useUserStore = defineStore({
     setRoleList(roleList: RoleEnum[]) {
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
+    },
+    setCustomLogin(login: boolean) {
+      this.customLogin = login;
+      setAuthCache(LOGIN_CUSTOM_FLAG, login);
     },
     setUserInfo(info: UserInfo | null) {
       this.userInfo = info;
@@ -159,7 +178,7 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean, data?: any): Promise<any | null> {
       if (!this.getToken) return null;
       //获取用户信息
-      const userInfo = await this.getUserInfoAction(data.userInfo, data.sysAllDictItems, data.sysAllCategoryItems.data);
+      const userInfo = await this.getUserInfoAction(data.userInfo, data.roles, data.sysAllDictItems, data.sysAllCategoryItems.data);
       // const userInfo = await this.getUserInfoAction(data.userInfo, data.sysAllDictItems);
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
@@ -206,13 +225,11 @@ export const useUserStore = defineStore({
     /**
      * 获取用户信息
      */
-    async getUserInfoAction(userInfo, sysAllDictItems, categoryItems): Promise<UserInfo | null> {
+    async getUserInfoAction(userInfo, roles, sysAllDictItems, categoryItems): Promise<UserInfo | null> {
       if (!this.getToken) {
         return null;
       }
       if (userInfo) {
-        const { roles = [] } = userInfo;
-        console.error(roles);
         if (isArray(roles)) {
           const roleList = roles.map((item) => item.value) as RoleEnum[];
           this.setRoleList(roleList);
@@ -221,6 +238,10 @@ export const useUserStore = defineStore({
           this.setRoleList([]);
         }
         this.setTenant(userInfo.relTenantIds);
+        if (roles.indexOf(RoleEnum.CUSTOM) !== -1) {
+          this.setCustomLogin(true);
+        }
+        if (this.customLogin) userInfo.homePath = PageEnum.CUSTOM_HOME;
         this.setUserInfo(userInfo);
       }
       /**

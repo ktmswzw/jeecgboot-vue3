@@ -5,7 +5,7 @@
     <Layout :class="[layoutClass]">
       <LayoutSideBar v-if="getShowSidebar || getIsMobile" />
       <Layout :class="`${prefixCls}-main`">
-        <LayoutMultipleHeader />
+        <LayoutMultipleHeader v-if="!userStore.getCustomLogin" />
         <LayoutContent />
         <LayoutFooter />
       </Layout>
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, unref, ref } from 'vue';
+  import { defineComponent, computed, unref } from 'vue';
   import { Layout } from 'ant-design-vue';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
@@ -22,10 +22,12 @@
   import LayoutContent from './content/index.vue';
   import LayoutSideBar from './sider/index.vue';
   import LayoutMultipleHeader from './header/MultipleHeader.vue';
+  // import { useCustomLogin } from '/@/hooks/web/useCustomLogin';
 
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useUserStore } from '/@/store/modules/user';
   import { useLockPage } from '/@/hooks/web/useLockPage';
 
   import { useAppInject } from '/@/hooks/web/useAppInject';
@@ -50,6 +52,9 @@
       // Create a lock screen monitor
       const lockEvents = useLockPage();
 
+      const userStore = useUserStore();
+      // const { isCustomLogin } = userStore.getCustomLogin;
+
       const layoutClass = computed(() => {
         let cls: string[] = ['ant-layout'];
         if (unref(getIsMixSidebar) || unref(getShowMenu)) {
@@ -60,6 +65,7 @@
 
       return {
         getShowFullHeaderRef,
+        userStore,
         getShowSidebar,
         prefixCls,
         getIsMobile,
