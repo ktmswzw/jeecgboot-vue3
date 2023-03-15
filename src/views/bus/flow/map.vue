@@ -20,7 +20,7 @@
   let map = ref(null);
 
   // 此处瓦片地址和 vue2 中的一样，可在本地测
-  const mapUrl = ref('http://192.168.0.85/zjlsldtuchu/tiles/{z}/{x}/{y}.jpg');
+  const mapUrl = ref('http://192.168.0.85/zjls/tiles/{z}/{x}/{y}.jpg');
   // const mapUrl = ref(`tiles/{z}/{x}/{y}.png`)
 
   // 初始化地图
