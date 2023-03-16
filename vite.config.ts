@@ -77,6 +77,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       reportCompressedSize: false,
       chunkSizeWarningLimit: 2000,
     },
+    assetsInclude: ['**/*.glb'],
     define: {
       // setting vue-i18-next
       // Suppress warning

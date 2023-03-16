@@ -458,3 +458,23 @@ export function dataURLtoFile(dataurl, filename) {
 
   return new File([u8arr], filename, { type: mime });
 }
+
+//定义一些常量
+const x_PI = 52.35987755982988;
+
+/**
+ * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
+ * 即 百度 转 谷歌、高德
+ * @param bd_lon
+ * @param bd_lat
+ * @returns {*[]}
+ */
+export function bd09toGCJ02(bd_lon, bd_lat) {
+  const x = bd_lon - 0.0065;
+  const y = bd_lat - 0.006;
+  const z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_PI);
+  const theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_PI);
+  const gg_lng = z * Math.cos(theta);
+  const gg_lat = z * Math.sin(theta);
+  return [gg_lng, gg_lat];
+}
