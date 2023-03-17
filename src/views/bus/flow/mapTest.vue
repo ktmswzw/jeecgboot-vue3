@@ -1,5 +1,6 @@
 <template>
-  <div id="cesiumContainer"></div>
+  <div id="cesiumContainer" class="cesiumContainer"></div>
+  <canvas id="canvas-a" class="canvas" width="300" height="300"></canvas>
 </template>
 
 <script>
@@ -10,9 +11,13 @@
   import boat from '/@/assets/gltf/boat.glb';
   import feiji from '/@/assets/gltf/feiji.glb';
   import imgBlue from '/@/assets/svg/boat-blue.svg';
-
   export default {
     setup() {
+      let rotation = Cesium.Math.toRadians(60);
+      const getRotationValue = () => {
+        rotation -= 0.01;
+        return rotation;
+      };
       onMounted(() => {
         console.log('Cesium.VERSION', Cesium.VERSION);
         Cesium.Ion.defaultAccessToken =
@@ -36,6 +41,8 @@
             requestVertexNormals: true,
           }),
         });
+
+        // viewer.imageryLayers.remove(viewer.imageryLayers.get(0));
         const id = Math.floor(Math.random() * 8);
         const tdt = new Cesium.WebMapTileServiceImageryProvider({
           url: `http://t${id}.tianditu.gov.cn/cia_w/wmts?tk=93b13175e8baf910b9360c2ce099f836`,
@@ -54,8 +61,9 @@
         // const divSelf = viewer.imageryLayers.addImageryProvider(self);
         const divTDT = viewer.imageryLayers.addImageryProvider(tdt);
         viewer.imageryLayers.raise(divTDT);
-
         viewer.scene.globe.show = true;
+        // viewer.scene.globe.depthTestAgainstTerrain = true; //地形遮挡效果开关，打开后地形会遮挡看不到的区域
+        viewer.scene.globe.enableLighting = true; //对大气和雾启用动态照明效果
         viewer._cesiumWidget._creditContainer.style.display = 'none';
         viewer._cesiumWidget._supportsImageRenderingPixelated = Cesium.FeatureDetection.supportsImageRenderingPixelated();
         viewer._cesiumWidget._forceResize = true;
@@ -66,8 +74,9 @@
         // // This works
         // viewer.infoBox.frame.removeAttribute('sandbox'); // 必须要加，不然有报错： Can’t run scripts in infobox
         // viewer.infoBox.frame.src = 'about:blank';
-        let la2 = bd09toGCJ02(120.300319, 28.13513);
-        let la = bd09toGCJ02(120.300319, 28.12301);
+        let la = bd09toGCJ02(120.300319, 28.12301); // 移动俯视点坐标
+        let la2 = bd09toGCJ02(120.300319, 28.13513); // 转换坐标
+        let la3 = bd09toGCJ02(120.120319, 28.13513); // 移动俯视点坐标
         console.log(la);
         const destinationOrigin = Cesium.Cartesian3.fromDegrees(la[0], la[1], 1000.0);
         const destinationOriginLower = Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10.0);
@@ -84,6 +93,34 @@
             },
             duration: 5, //设置飞行时间,默认会根据距离来计算
             complete: function () {
+
+              
+
+              //未完成雷达图1
+              // let canvas = document.getElementById('canvas-a');
+              // let context = canvas.getContext('2d');
+              // let grd = context.createLinearGradient(-200, -2, 10, 10);
+              // grd.addColorStop(0, 'rgba(0,255,0,0)');
+              // grd.addColorStop(1, 'rgba(0,255,0,1)');
+              // context.fillStyle = grd;
+              // context.beginPath();
+              // context.moveTo(150, 150);
+              // context.arc(150, 150, 140, (-90 / 180) * Math.PI, (0 / 180) * Math.PI);
+              // context.fill();
+              // viewer.entities.add({
+              //   name: 'Rotating rectangle with rotating texture coordinate',
+              //   rectangle: {
+              //     coordinates: Cesium.Rectangle.fromDegrees(la3[0], la3[1], la2[0], la2[1]),
+              //     material: new Cesium.ImageMaterialProperty({
+              //       image: canvas,
+              //       transparent: true,
+              //     }),
+              //     rotation: new Cesium.CallbackProperty(getRotationValue, false),
+              //     stRotation: new Cesium.CallbackProperty(getRotationValue, false),
+              //   },
+              // });
+
+              //添加点
               // const Point = viewer.entities.add({
               //   position: Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 0.1),
               //   billboard: {
@@ -100,54 +137,79 @@
               //     show: true,
               //   },
               // });
-              const label = viewer.entities.add({
-                position: Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10),
-                // 文字
-                label: {
-                  // 文本。支持显式换行符“ \ n”
-                  text: '渔船1',
-                  // 字体样式，以CSS语法指定字体
-                  font: '10pt Source Han Sans CN',
-                  // 字体颜色
-                  fillColor: Cesium.Color.BLUE,
-                  // 背景颜色
-                  backgroundColor: Cesium.Color.YELLOW,
-                  // 是否显示背景颜色
-                  showBackground: false,
-                  // 字体边框
-                  outline: true,
-                  // 字体边框颜色
-                  outlineColor: Cesium.Color.YELLOW,
-                  // 字体边框尺寸
-                  outlineWidth: 4,
-                  // 应用于图像的统一比例。比例大于会1.0放大标签，而比例小于会1.0缩小标签。
-                  scale: 1.0,
-                  // 设置样式：FILL：填写标签的文本，但不要勾勒轮廓；OUTLINE：概述标签的文本，但不要填写；FILL_AND_OUTLINE：填写并概述标签文本。
-                  style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-                  // 相对于坐标的水平位置
-                  verticalOrigin: Cesium.VerticalOrigin.CENTER,
-                  // 相对于坐标的水平位置
-                  horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
-                  // 该属性指定标签在屏幕空间中距此标签原点的像素偏移量
-                  pixelOffset: new Cesium.Cartesian2(-20, 25),
-                  // 显示在距相机的距离处的属性，多少区间内是可以显示的
-                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 10000),
-                  // 是否显示
-                  show: true,
-                },
-              });
 
-              const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(destinationOriginLower);
-              const model = Cesium.Model.fromGltf({
-                url: boat,
-                scale: 0.3,
-                modelMatrix: modelMatrix,
-              });
-              model.readyPromise.then(function (model) {
-                // Play all animations when the model is ready to render
-                model.activeAnimations.addAll();
-              });
-              viewer.scene.primitives.add(model);
+              // 添加字体
+              // const label = viewer.entities.add({
+              //   position: Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10),
+              //   // 文字
+              //   label: {
+              //     // 文本。支持显式换行符“ \ n”
+              //     text: '渔船1',
+              //     // 字体样式，以CSS语法指定字体
+              //     font: '10pt Source Han Sans CN',
+              //     // 字体颜色
+              //     fillColor: Cesium.Color.BLUE,
+              //     // 背景颜色
+              //     backgroundColor: Cesium.Color.YELLOW,
+              //     // 是否显示背景颜色
+              //     showBackground: false,
+              //     // 字体边框
+              //     outline: true,
+              //     // 字体边框颜色
+              //     outlineColor: Cesium.Color.YELLOW,
+              //     // 字体边框尺寸
+              //     outlineWidth: 4,
+              //     // 应用于图像的统一比例。比例大于会1.0放大标签，而比例小于会1.0缩小标签。
+              //     scale: 1.0,
+              //     // 设置样式：FILL：填写标签的文本，但不要勾勒轮廓；OUTLINE：概述标签的文本，但不要填写；FILL_AND_OUTLINE：填写并概述标签文本。
+              //     style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+              //     // 相对于坐标的水平位置
+              //     verticalOrigin: Cesium.VerticalOrigin.CENTER,
+              //     // 相对于坐标的水平位置
+              //     horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+              //     // 该属性指定标签在屏幕空间中距此标签原点的像素偏移量
+              //     pixelOffset: new Cesium.Cartesian2(-20, 25),
+              //     // 显示在距相机的距离处的属性，多少区间内是可以显示的
+              //     distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 10000),
+              //     // 是否显示
+              //     show: true,
+              //   },
+              // });
+
+              //添加模式方式1
+              // const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(destinationOriginLower);
+              // const model = Cesium.Model.fromGltf({
+              //   url: boat,
+              //   scale: 0.3,
+              //   modelMatrix: modelMatrix,
+              // });
+              // model.readyPromise.then(function (model) {
+              //   // Play all animations when the model is ready to render
+              //   model.activeAnimations.addAll();
+              // });
+              // viewer.scene.primitives.add(model);
+              // viewer.scene.primitives.remove(model);
+
+              // 添加模型方式2
+              // var position = Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10.0);
+              // var hpr = new Cesium.HeadingPitchRoll(0, 0, 0);
+              //朝向（弧度单位）
+              //var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
+              // const entity = viewer.entities.add({
+              //   name: boat,
+              //   description: '<div><p>这是船！</div>', // 这是模型的描述属性，可以是html标签
+              //   position: position,
+              //   orientation: orientation,
+              //   model: {
+              //     uri: boat,
+              //     scale: 0.3,
+              //     minimumPixelSize: 128,
+              //     maximumScale: 20000,
+              //     distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 10000),
+              //     // 是否显示
+              //     show: true,
+              //   },
+              // });
             },
             pitchAdjustHeight: -90, // 如果摄像机飞越高于该值，则调整俯仰的俯仰角度，并将地球保持在视口中
             maximumHeight: 4000, // 相机最大飞行高度
@@ -161,4 +223,9 @@
 
 <style scoped>
   @import url(./css/widgets.css);
+
+  #canvas-a {
+    top: 10px;
+    display: none;
+  }
 </style>
