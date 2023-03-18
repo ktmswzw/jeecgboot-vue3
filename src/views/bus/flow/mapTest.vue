@@ -6,16 +6,17 @@
 <script>
   import * as Cesium from 'cesium';
   import { onMounted } from 'vue';
-  import { bd09toGCJ02 } from '/@/utils';
+  import {bd09toGCJ02, getCanvas, getCanvas2, getCesiumArray} from '/@/utils';
   import img from '/@/assets/svg/boat.svg';
   import boat from '/@/assets/gltf/boat.glb';
   import feiji from '/@/assets/gltf/feiji.glb';
   import imgBlue from '/@/assets/svg/boat-blue.svg';
+  import TrackMatte from '/@/views/bus/flow/radar';
   export default {
     setup() {
       let rotation = Cesium.Math.toRadians(60);
       const getRotationValue = () => {
-        rotation -= 0.01;
+        rotation -= 0.003;
         return rotation;
       };
       onMounted(() => {
@@ -62,7 +63,7 @@
         const divTDT = viewer.imageryLayers.addImageryProvider(tdt);
         viewer.imageryLayers.raise(divTDT);
         viewer.scene.globe.show = true;
-        // viewer.scene.globe.depthTestAgainstTerrain = true; //地形遮挡效果开关，打开后地形会遮挡看不到的区域
+        viewer.scene.globe.depthTestAgainstTerrain = true; //地形遮挡效果开关，打开后地形会遮挡看不到的区域
         viewer.scene.globe.enableLighting = true; //对大气和雾启用动态照明效果
         viewer._cesiumWidget._creditContainer.style.display = 'none';
         viewer._cesiumWidget._supportsImageRenderingPixelated = Cesium.FeatureDetection.supportsImageRenderingPixelated();
@@ -74,16 +75,15 @@
         // // This works
         // viewer.infoBox.frame.removeAttribute('sandbox'); // 必须要加，不然有报错： Can’t run scripts in infobox
         // viewer.infoBox.frame.src = 'about:blank';
-        let la = bd09toGCJ02(120.300319, 28.12301); // 移动俯视点坐标
-        let la2 = bd09toGCJ02(120.300319, 28.13513); // 转换坐标
-        let la3 = bd09toGCJ02(120.120319, 28.13513); // 移动俯视点坐标
-        console.log(la);
-        const destinationOrigin = Cesium.Cartesian3.fromDegrees(la[0], la[1], 1000.0);
-        const destinationOriginLower = Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10.0);
+        let la1 = bd09toGCJ02(120.300319, 28.13513); // boat
+        let la3 = bd09toGCJ02(120.310319, 28.14513); // 雷达
+        let cameraLa = bd09toGCJ02(120.300319, 28.10513); // 摄像头
+        const destinationOrigin = Cesium.Cartesian3.fromDegrees(la1[0], la1[1], 10.0);
+        const destinationCamera = Cesium.Cartesian3.fromDegrees(cameraLa[0], cameraLa[1], 3000.0);
         setTimeout(() => {
           viewer.camera.flyTo({
             // fromDegrees()方法，将经纬度和高程转换为世界坐标
-            destination: destinationOrigin, // 设置位置
+            destination: destinationCamera, // 设置位置
             orientation: {
               // 指向
               heading: Cesium.Math.toRadians(0),
@@ -93,36 +93,53 @@
             },
             duration: 5, //设置飞行时间,默认会根据距离来计算
             complete: function () {
+              // 添加模型方式2
+              const hpr = new Cesium.HeadingPitchRoll(0, 0, 0);
+              //朝向（弧度单位）
+              const orientation = Cesium.Transforms.headingPitchRollQuaternion(destinationOrigin, hpr);
+              const entity = viewer.entities.add({
+                name: boat,
+                description: '<div><p>这是船！</div>', // 这是模型的描述属性，可以是html标签
+                position: destinationOrigin,
+                orientation: orientation,
+                model: {
+                  uri: boat,
+                  scale: 0.1,
+                  minimumPixelSize: 128,
+                  maximumScale: 0.3,
+                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 8000),
+                  // 是否显示
+                  show: true,
+                },
+              });
 
-              
-
-              //未完成雷达图1
-              // let canvas = document.getElementById('canvas-a');
-              // let context = canvas.getContext('2d');
-              // let grd = context.createLinearGradient(-200, -2, 10, 10);
-              // grd.addColorStop(0, 'rgba(0,255,0,0)');
-              // grd.addColorStop(1, 'rgba(0,255,0,1)');
-              // context.fillStyle = grd;
-              // context.beginPath();
-              // context.moveTo(150, 150);
-              // context.arc(150, 150, 140, (-90 / 180) * Math.PI, (0 / 180) * Math.PI);
-              // context.fill();
+              // // 完成雷达图1
               // viewer.entities.add({
               //   name: 'Rotating rectangle with rotating texture coordinate',
               //   rectangle: {
-              //     coordinates: Cesium.Rectangle.fromDegrees(la3[0], la3[1], la2[0], la2[1]),
+              //     coordinates: Cesium.Rectangle.fromCartesianArray(getCesiumArray(Cesium, la3[0], la3[1])),
               //     material: new Cesium.ImageMaterialProperty({
-              //       image: canvas,
+              //       image: getCanvas('canvas-a'),
               //       transparent: true,
               //     }),
               //     rotation: new Cesium.CallbackProperty(getRotationValue, false),
-              //     stRotation: new Cesium.CallbackProperty(getRotationValue, false),
+              //     stRotation: new Cesium.CallbackProperty(getRotationValue, true),
               //   },
               // });
 
+              const radar = new TrackMatte({
+                viewer: viewer,
+                position: [la3[0], la3[1]],
+                radius: 1000.0,
+                color: new Cesium.Color(0.0, 1.0, 0.0, 0.5),
+                colorWall: new Cesium.Color(1.0, 1.0, 1.0, 0.2),
+                speed: 1.0,
+                height: -500,
+              });
+
               //添加点
               // const Point = viewer.entities.add({
-              //   position: Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 0.1),
+              //   position: Cesium.Cartesian3.fromDegrees(la1[0], la1[1], 10),
               //   billboard: {
               //     image: imgBlue,
               //     height: 30,
@@ -137,7 +154,6 @@
               //     show: true,
               //   },
               // });
-
               // 添加字体
               // const label = viewer.entities.add({
               //   position: Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10),
@@ -175,47 +191,12 @@
               //     show: true,
               //   },
               // });
-
-              //添加模式方式1
-              // const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(destinationOriginLower);
-              // const model = Cesium.Model.fromGltf({
-              //   url: boat,
-              //   scale: 0.3,
-              //   modelMatrix: modelMatrix,
-              // });
-              // model.readyPromise.then(function (model) {
-              //   // Play all animations when the model is ready to render
-              //   model.activeAnimations.addAll();
-              // });
-              // viewer.scene.primitives.add(model);
-              // viewer.scene.primitives.remove(model);
-
-              // 添加模型方式2
-              // var position = Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10.0);
-              // var hpr = new Cesium.HeadingPitchRoll(0, 0, 0);
-              //朝向（弧度单位）
-              //var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
-              // const entity = viewer.entities.add({
-              //   name: boat,
-              //   description: '<div><p>这是船！</div>', // 这是模型的描述属性，可以是html标签
-              //   position: position,
-              //   orientation: orientation,
-              //   model: {
-              //     uri: boat,
-              //     scale: 0.3,
-              //     minimumPixelSize: 128,
-              //     maximumScale: 20000,
-              //     distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 10000),
-              //     // 是否显示
-              //     show: true,
-              //   },
-              // });
             },
             pitchAdjustHeight: -90, // 如果摄像机飞越高于该值，则调整俯仰的俯仰角度，并将地球保持在视口中
             maximumHeight: 4000, // 相机最大飞行高度
             flyOverLongitude: 100, // 如果到达目的地有2种方式，设置具体值后会强制选择方向飞过这个经度
           });
-        }, 6000);
+        }, 1000);
       });
     },
   };

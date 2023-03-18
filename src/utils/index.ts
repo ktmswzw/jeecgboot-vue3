@@ -20,6 +20,7 @@ export function aesEncrypt(word, keyWord = 'XwKsGlMcdPMEhR1B') {
   });
   return encrypted.toString();
 }
+
 /**
  * @description:  Set ui mount node
  */
@@ -90,6 +91,7 @@ export function getValueType(props, field) {
   }
   return valueType;
 }
+
 export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormalized {
   if (!route) return route;
   const { matched, ...opt } = route;
@@ -104,6 +106,7 @@ export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormal
       : undefined) as RouteRecordNormalized[],
   };
 }
+
 /**
  * 深度克隆对象、数组
  * @param obj 被克隆的对象
@@ -199,6 +202,7 @@ export function getQueryVariable(url) {
   }
   return s;
 }
+
 /**
  * 判断是否显示办理按钮
  * @param bpmStatus
@@ -210,6 +214,7 @@ export function showDealBtn(bpmStatus) {
   }
   return false;
 }
+
 /**
  * 数字转大写
  * @param value
@@ -275,6 +280,7 @@ export function numToUpper(value) {
 
 //update-begin-author:taoyan date:2022-6-8 for:解决老的vue2动态导入文件语法 vite不支持的问题
 const allModules = import.meta.glob('../views/**/*.vue');
+
 export function importViewsFile(path): Promise<any> {
   if (path.startsWith('/')) {
     path = path.substring(1);
@@ -301,6 +307,7 @@ export function importViewsFile(path): Promise<any> {
     }
   });
 }
+
 //update-end-author:taoyan date:2022-6-8 for:解决老的vue2动态导入文件语法 vite不支持的问题
 
 /**
@@ -477,4 +484,87 @@ export function bd09toGCJ02(bd_lon, bd_lat) {
   const gg_lng = z * Math.cos(theta);
   const gg_lat = z * Math.sin(theta);
   return [gg_lng, gg_lat];
+}
+
+export function FindMaxMinPoint(longitude, latitude, distance) {
+  const r = 6378137; //地球半径米
+  const dis = distance; //米
+  let dlng = 2 * Math.asin(Math.sin(dis / (2 * r)) / Math.cos((latitude * Math.PI) / 180));
+  dlng = (dlng * 180) / Math.PI; //角度转为弧度
+  let dlat = dis / r;
+  dlat = (dlat * 180) / Math.PI; //角度转为弧度
+
+  const minlat = latitude - dlat;
+  const maxlat = latitude + dlat;
+  const minlng = longitude - dlng;
+  const maxlng = longitude + dlng;
+
+  return [
+    [minlng, minlat],
+    [minlng, maxlat],
+    [maxlng, minlat],
+    [maxlng, maxlat],
+  ];
+}
+
+export function getCesiumArray(Cesium, lng, lat) {
+  const arr = FindMaxMinPoint(lng, lat, 1 * 800);
+  let tl = Cesium.Cartographic.fromDegrees(arr[0][0], arr[0][1], 0);
+  let tr = Cesium.Cartographic.fromDegrees(arr[1][0], arr[1][1], 0);
+  let bl = Cesium.Cartographic.fromDegrees(arr[2][0], arr[2][1], 0);
+  let br = Cesium.Cartographic.fromDegrees(arr[3][0], arr[3][1], 0);
+
+  tl = Cesium.Cartographic.toCartesian(tl);
+  tr = Cesium.Cartographic.toCartesian(tr);
+  bl = Cesium.Cartographic.toCartesian(bl);
+  br = Cesium.Cartographic.toCartesian(br);
+
+  const cartoArr = [bl, br, tr, tl];
+  console.log(cartoArr);
+  return cartoArr;
+}
+
+export function getCanvas(name) {
+  const canvas = document.getElementById(name);
+  const context = canvas.getContext('2d');
+  const radarLength = 150;
+  const grd = context.createLinearGradient(radarLength, 0, radarLength, radarLength);
+  grd.addColorStop(0, 'rgba(0,255,0,0)');
+  grd.addColorStop(1, 'rgba(0,255,0,1)');
+  context.fillStyle = grd;
+  context.beginPath();
+  context.moveTo(radarLength, radarLength);
+  // 定点位置  *  长度  起止角度
+  context.arc(radarLength, radarLength, radarLength, (-90 / 180) * Math.PI, (-88 / 180) * Math.PI);
+  context.fill();
+  return canvas;
+}
+
+//每次旋转角度
+export function getCanvas2(name) {
+  const initDeg = 90; //扇形的初始角度
+  const canvas = document.getElementById(name);
+  const ctx = canvas.getContext('2d');
+  const radarLength = 150;
+  const startOPA = 0.1; //初始的透明度
+  const endOPA = 0.9; //结束的透明度
+  const rad_step = 1; //渲染间隔度数-角度
+  const sum_step = initDeg / rad_step; //总共渲染次数
+  const opa_step = (endOPA - startOPA) / sum_step; //透明度步进
+  for (let i = 0; i < sum_step; i++) {
+    ctx.fillStyle = 'rgba(0,255,0,' + (startOPA + opa_step * i) + ')';
+    console.log(ctx.fillStyle);
+    ctx.beginPath();
+    ctx.moveTo(radarLength, radarLength);
+    ctx.arc(
+      radarLength,
+      radarLength,
+      radarLength,
+      ((-(initDeg * (1 - i / sum_step)) + 1) / 180) * Math.PI,
+      ((-(initDeg * (1 - (i + 1) / sum_step)) + 1) / 180) * Math.PI
+    );
+    ctx.fill();
+    ctx.closePath();
+  }
+  return canvas;
 }
