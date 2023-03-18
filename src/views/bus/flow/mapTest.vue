@@ -1,12 +1,11 @@
 <template>
   <div id="cesiumContainer" class="cesiumContainer"></div>
-  <canvas id="canvas-a" class="canvas" width="300" height="300"></canvas>
 </template>
 
 <script>
   import * as Cesium from 'cesium';
   import { onMounted } from 'vue';
-  import {bd09toGCJ02, getCanvas, getCanvas2, getCesiumArray} from '/@/utils';
+  import { bd09toGCJ02 } from '/@/utils';
   import img from '/@/assets/svg/boat.svg';
   import boat from '/@/assets/gltf/boat.glb';
   import feiji from '/@/assets/gltf/feiji.glb';
@@ -14,11 +13,6 @@
   import TrackMatte from '/@/views/bus/flow/radar';
   export default {
     setup() {
-      let rotation = Cesium.Math.toRadians(60);
-      const getRotationValue = () => {
-        rotation -= 0.003;
-        return rotation;
-      };
       onMounted(() => {
         console.log('Cesium.VERSION', Cesium.VERSION);
         Cesium.Ion.defaultAccessToken =
@@ -113,26 +107,12 @@
                 },
               });
 
-              // // 完成雷达图1
-              // viewer.entities.add({
-              //   name: 'Rotating rectangle with rotating texture coordinate',
-              //   rectangle: {
-              //     coordinates: Cesium.Rectangle.fromCartesianArray(getCesiumArray(Cesium, la3[0], la3[1])),
-              //     material: new Cesium.ImageMaterialProperty({
-              //       image: getCanvas('canvas-a'),
-              //       transparent: true,
-              //     }),
-              //     rotation: new Cesium.CallbackProperty(getRotationValue, false),
-              //     stRotation: new Cesium.CallbackProperty(getRotationValue, true),
-              //   },
-              // });
-
               const radar = new TrackMatte({
                 viewer: viewer,
                 position: [la3[0], la3[1]],
                 radius: 1000.0,
-                color: new Cesium.Color(0.0, 1.0, 0.0, 0.5),
-                colorWall: new Cesium.Color(1.0, 1.0, 1.0, 0.2),
+                color: new Cesium.Color(0.0, 0.0, 1, 0.2),
+                colorWall: new Cesium.Color(0.0, 1.0, 0.0, 0.5),
                 speed: 1.0,
                 height: -500,
               });
@@ -208,5 +188,6 @@
   #canvas-a {
     top: 10px;
     display: none;
+    color: rgba(10, 143, 233, 0.61);
   }
 </style>

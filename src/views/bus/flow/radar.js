@@ -7,7 +7,7 @@ class TrackMatte {
     this._radius = options.radius;
     // 扫描扇形颜色
     this._color = options.color;
-    this.colorWall = options.colorWall;
+    this._colorWall = options.colorWall;
     // 扫描速度
     this._speed = options.speed;
     //高度
