@@ -25,11 +25,11 @@
           fullscreenButton: false, // 是否显示全屏按钮
           geocoder: false, // 是否显示地名查找控件
           homeButton: false, // 是否显示返回主视角控件
-          sceneModePicker: true, // 是否显示投影方式控件
-          selectionIndicator: false, // 是否显示选中指示框
+          sceneModePicker: false, // 是否显示投影方式控件
+          selectionIndicator: true, // 是否显示选中指示框
           timeline: false, // 是否显示时间线控件
           navigationHelpButton: false, // 是否显示帮助信息控件
-          infoBox: false, // 是否显示点击要素之后显示的信息
+          infoBox: true, // 是否显示点击要素之后显示的信息
           terrainProvider: Cesium.createWorldTerrain({
             //配置地形的3D效果
             requestWaterMask: true,
@@ -65,13 +65,18 @@
         if (Cesium.FeatureDetection.supportsImageRenderingPixelated()) {
           viewer.resolutionScale = window.devicePixelRatio;
         }
+        viewer.screenSpaceEventHandler.setInputAction(function () {}, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+        // 获取当前视角高度
+        let scene = viewer.scene;
+        let ellipsoid = scene.globe.ellipsoid;
+        let height = ellipsoid.cartesianToCartographic(viewer.camera.position).height;
         //
         // // This works
-        // viewer.infoBox.frame.removeAttribute('sandbox'); // 必须要加，不然有报错： Can’t run scripts in infobox
+        viewer.infoBox.frame.removeAttribute('sandbox'); // 必须要加，不然有报错： Can’t run scripts in infobox
         // viewer.infoBox.frame.src = 'about:blank';
         let la1 = bd09toGCJ02(120.300319, 28.13513); // boat
         let la3 = bd09toGCJ02(120.310319, 28.14513); // 雷达
-        let cameraLa = bd09toGCJ02(120.300319, 28.10513); // 摄像头
+        let cameraLa = bd09toGCJ02(120.300319, 28.09513); // 摄像头
         const destinationOrigin = Cesium.Cartesian3.fromDegrees(la1[0], la1[1], 10.0);
         const destinationCamera = Cesium.Cartesian3.fromDegrees(cameraLa[0], cameraLa[1], 3000.0);
         setTimeout(() => {
@@ -82,30 +87,30 @@
               // 指向
               heading: Cesium.Math.toRadians(0),
               // 视角
-              pitch: Cesium.Math.toRadians(-35),
+              pitch: Cesium.Math.toRadians(-25),
               roll: 0.0,
             },
             duration: 5, //设置飞行时间,默认会根据距离来计算
             complete: function () {
-              // 添加模型方式2
-              const hpr = new Cesium.HeadingPitchRoll(0, 0, 0);
-              //朝向（弧度单位）
-              const orientation = Cesium.Transforms.headingPitchRollQuaternion(destinationOrigin, hpr);
-              const entity = viewer.entities.add({
-                name: boat,
-                description: '<div><p>这是船！</div>', // 这是模型的描述属性，可以是html标签
-                position: destinationOrigin,
-                orientation: orientation,
-                model: {
-                  uri: boat,
-                  scale: 0.1,
-                  minimumPixelSize: 128,
-                  maximumScale: 0.3,
-                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 8000),
-                  // 是否显示
-                  show: true,
-                },
-              });
+              // // 添加模型方式2
+              // const hpr = new Cesium.HeadingPitchRoll(0, 0, 0);
+              // //朝向（弧度单位）
+              // const orientation = Cesium.Transforms.headingPitchRollQuaternion(destinationOrigin, hpr);
+              // const entity = viewer.entities.add({
+              //   name: boat,
+              //   description: '<div><p>这是船！</div>', // 这是模型的描述属性，可以是html标签
+              //   position: destinationOrigin,
+              //   orientation: orientation,
+              //   model: {
+              //     uri: boat,
+              //     scale: 0.1,
+              //     minimumPixelSize: 128,
+              //     maximumScale: 0.3,
+              //     distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 8000),
+              //     // 是否显示
+              //     show: true,
+              //   },
+              // });
 
               const radar = new TrackMatte({
                 viewer: viewer,
@@ -134,6 +139,55 @@
               //     show: true,
               //   },
               // });
+
+              let x = 3; //控制频率改变x大小越大闪烁间隔越大
+              var flog = true;
+              const point = viewer.entities.add({
+                name: '渔船',
+                point: {
+                  show: true,
+                  pixelSize: 35,
+                  color: new Cesium.CallbackProperty(function () {
+                    if (flog) {
+                      x = x - 0.05;
+                      if (x <= 0) {
+                        flog = false;
+                      }
+                    } else {
+                      x = x + 0.05;
+                      if (x >= 1) {
+                        flog = true;
+                      }
+                    }
+                    return Cesium.Color.RED.withAlpha(x);
+                  }, false),
+                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                  scaleByDistance: new Cesium.NearFarScalar(1500, 1, 10000, 0.3),
+                  translucencyByDistance: new Cesium.NearFarScalar(1500, 1, 10000, 0.2),
+                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 10000),
+                },
+                description: `<p>这是entity的属性信息，entity的description里面可以写一段html</p>
+                <img width="450" height="200" src="https://pic2.zhimg.com/80/v2-f0f0165783dcb4b5fe76a066384879cd_1440w.webp"></img>
+                <video class="m-auto rounded" src="https://vjs.zencdn.net/v/oceans.mp4" width="600" controls></video>
+                <p>苹果园dog</p>`,
+                position: Cesium.Cartesian3.fromDegrees(la1[0], la1[1], 10),
+                label: {
+                  text: '渔船1',
+                  scale: 0.8,
+                  fillColor: Cesium.Color.YELLOW,
+                  outline: true,
+                  outlineColor: Cesium.Color.YELLOW,
+                  verticalOrigin: Cesium.VerticalOrigin.TOP,
+                  horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                  scaleByDistance: new Cesium.NearFarScalar(1500, 1, 10000, 0.3),
+                  translucencyByDistance: new Cesium.NearFarScalar(1500, 1, 10000, 0.2),
+                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 10000),
+                  pixelOffset: new Cesium.Cartesian2(0, -30),
+                },
+                show: true,
+              });
+
               // 添加字体
               // const label = viewer.entities.add({
               //   position: Cesium.Cartesian3.fromDegrees(la2[0], la2[1], 10),
@@ -184,10 +238,8 @@
 
 <style scoped>
   @import url(./css/widgets.css);
-
-  #canvas-a {
-    top: 10px;
-    display: none;
-    color: rgba(10, 143, 233, 0.61);
+  .cesiumContainer {
+    height: 100%;
+    width: 100%;
   }
 </style>
