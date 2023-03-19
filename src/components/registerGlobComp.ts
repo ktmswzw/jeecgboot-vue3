@@ -15,6 +15,7 @@ import '/@/assets/bpmn/properties-panel.css';
 import '/@/assets/bpmn/bpmn-js-token-simulation.css';
 import '/@/assets/bpmn/diagram-js-minimap.css';
 import '/@/assets/bpmn/bpmn-js-bpmnlint.css';
+import DataVVue3 from '@kjgl77/datav-vue3';
 
 // import 'anyi-process-ee-antvue/dist/style.css';
 import '/@/assets/bpmn/anyi-process-ee-antvue.css';
@@ -81,6 +82,7 @@ export function registerGlobComp(app: App) {
 
   // @ts-ignore
   app
+    .use(DataVVue3)
     .use(AnYiProcessEE)
     .use(Select)
     .use(Alert)

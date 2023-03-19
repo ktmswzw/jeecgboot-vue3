@@ -1,15 +1,23 @@
 <template>
-  <div class="p-4 center" ref="el">
-    <div class="md:flex enter-y">
-      <div class="md:w-1/3 w-full" :loading="loading">
-        <video class="m-auto rounded" src="https://vjs.zencdn.net/v/oceans.mp4" width="600" controls></video>
+  <div ref="el" class="cesiumContainer">
+    <div class="cesium-viewer-toolbar-self">
+      <div class="cesium-sceneModePicker-wrapper">
+        <a-card title="Default size card" style="width: 300px">
+          <template #extra><a href="#">more</a></template>
+          <p>card content</p>
+          <p>card content</p>
+          <p>card content</p>
+          <a-button @click="toggle"> Go Fullscreen </a-button>
+          <a-button @click="exitCustom"> Exit CustomLogin </a-button>
+        </a-card>
       </div>
+      <dv-border-box8 :dur="5">
+        <div dv-bg>
+          <a-button @click="toggle"> Go Fullscreen </a-button>
+        </div>
+      </dv-border-box8>
     </div>
-    <div class="!my-4 enter-y" :loading="loading">
-      <a-button @click="toggle"> Go Fullscreen </a-button>
-      <a-button @click="exitCustom"> Exit CustomLogin </a-button>
-    </div>
-    <SiteAnalysis class="!my-4 enter-y" :loading="loading" />
+    <map-test />
   </div>
 </template>
 
@@ -17,7 +25,7 @@
   import { ref } from 'vue';
   import { useFullscreen } from '@vueuse/core';
   import { useUserStore } from '/@/store/modules/user';
-  import SiteAnalysis from '/@/views/dashboard/Analysis/components/SiteAnalysis.vue';
+  import MapTest from '/@/views/bus/flow/mapTest.vue';
   const el = ref(null);
   let showMenu = useUserStore().getCustomLogin;
   const { toggle } = useFullscreen(el);
@@ -34,3 +42,23 @@
     toggle();
   }, 3000);
 </script>
+<style lang="less" scoped>
+  .cesium-viewer-toolbar-self {
+    display: block;
+    position: absolute;
+    top: 5px;
+    z-index: 999;
+    right: 5px;
+  }
+  .ant-card-bordered {
+    border: 1px solid #2a6486;
+  }
+  .ant-card {
+    color: #c9d1d9;
+    background: #15151573;
+  }
+
+  .cesiumContainer {
+    height: 100%;
+  }
+</style>

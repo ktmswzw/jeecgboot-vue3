@@ -1,5 +1,5 @@
 <template>
-  <div id="cesiumContainer" class="cesiumContainer"></div>
+  <div id="cesiumContainer" style="height: 100vh; width: 100vw"></div>
 </template>
 
 <script>
@@ -73,7 +73,7 @@
         //
         // // This works
         viewer.infoBox.frame.removeAttribute('sandbox'); // 必须要加，不然有报错： Can’t run scripts in infobox
-        // viewer.infoBox.frame.src = 'about:blank';
+        viewer.infoBox.frame.src = 'about:blank';
         let la1 = bd09toGCJ02(120.300319, 28.13513); // boat
         let la3 = bd09toGCJ02(120.310319, 28.14513); // 雷达
         let cameraLa = bd09toGCJ02(120.300319, 28.09513); // 摄像头
@@ -238,8 +238,4 @@
 
 <style scoped>
   @import url(./css/widgets.css);
-  .cesiumContainer {
-    height: 100%;
-    width: 100%;
-  }
 </style>
