@@ -6,6 +6,7 @@ export const LOCALE_KEY = 'LOCALE__';
 // user info key
 export const USER_INFO_KEY = 'USER__INFO__';
 
+export const LOGIN_CUSTOM_FLAG = 'LOGIN__CUSTOM__FLAG__';
 // role info key
 export const ROLES_KEY = 'ROLES__KEY__';
 
@@ -34,6 +35,9 @@ export const LOGIN_INFO_KEY = 'LOGIN__INFO__';
 
 // 聊天UID key
 export const JEECG_CHAT_UID = 'JEECG_CHAT_UID';
+
+export const PROCESS_INFO_KEY = 'PROCESS__INFO__KEY';
+export const DEPLOY_INFO = 'DEPLOY__INFO__';
 
 export enum CacheTypeEnum {
   SESSION,

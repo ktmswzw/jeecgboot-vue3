@@ -73,15 +73,15 @@ const setting: ProjectConfig = {
     // 主题
     theme: ThemeEnum.DARK,
     // 开启锁屏功能
-    useLockPage: false,
+    useLockPage: true,
     // 显示全屏按钮
     showFullScreen: true,
     // 显示文档按钮
-    showDoc: false,
+    showDoc: true,
     // 显示消息中心按钮
     showNotice: true,
     // 显示菜单搜索按钮
-    showSearch: false,
+    showSearch: true,
   },
 
   // 菜单配置

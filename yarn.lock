@@ -2766,6 +2766,11 @@
   resolved "https://registry.npmmirror.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
+"@types/pinyin@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.npmjs.org/@types/pinyin/-/pinyin-2.10.0.tgz#074964ec2f777d632e221f927a975bb7d51ded9a"
+  integrity sha512-YLty6FPYiBgxNbQNaTRJquvflRdG026jjOpjNXR7HdGEJPGtmPBp1x9LkWePCNA/ClaTT0hYem080TbRCMLbew==
+
 "@types/prettier@^2.1.5":
   version "2.7.2"
   resolved "https://registry.npmmirror.com/@types/prettier/-/prettier-2.7.2.tgz#6c2324641cc4ba050a8c710b2b251b377581fbf0"
@@ -10342,6 +10347,11 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.npmmirror.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==
+
+pinyin-pro@^3.11.0:
+  version "3.13.2"
+  resolved "https://registry.npmjs.org/pinyin-pro/-/pinyin-pro-3.13.2.tgz#b5a4716c33579398334291740b61a218b796b314"
+  integrity sha512-DKz04M0PkrongGyJW7GU+iNB2jInwLcP1p5+w0gu0hz2PtF8q+GTC1GDW731wyhm+q7PGoyMuY3sLONLTqi6mg==
 
 pirates@^4.0.4:
   version "4.0.5"
