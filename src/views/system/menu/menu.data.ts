@@ -20,13 +20,13 @@ export const columns: BasicColumn[] = [
   {
     title: '菜单名称',
     dataIndex: 'name',
-    width: 200,
+    width: 150,
     align: 'left',
   },
   {
     title: '菜单类型',
     dataIndex: 'menuType',
-    width: 150,
+    width: 100,
     customRender: ({ text }) => {
       return render.renderDict(text, 'menu_type');
     },
@@ -43,13 +43,13 @@ export const columns: BasicColumn[] = [
     title: '组件',
     dataIndex: 'component',
     align: 'left',
-    width: 150,
+    width: 200,
   },
   {
     title: '路径',
     dataIndex: 'url',
     align: 'left',
-    width: 150,
+    width: 200,
   },
   {
     title: '排序',

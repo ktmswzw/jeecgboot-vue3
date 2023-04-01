@@ -72,6 +72,7 @@
         subTitle: t('sys.exception.subTitle403'),
         btnText: props.full ? backLoginI18n : backHomeI18n,
         handler: () => (props.full ? go(PageEnum.BASE_LOGIN) : go()),
+        icon: notDataSvg,
       });
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_FOUND, {
@@ -80,6 +81,7 @@
         subTitle: t('sys.exception.subTitle404'),
         btnText: props.full ? backLoginI18n : backHomeI18n,
         handler: () => (props.full ? go(PageEnum.BASE_LOGIN) : go()),
+        icon: notDataSvg,
       });
 
       unref(statusMapRef).set(ExceptionEnum.ERROR, {
@@ -88,6 +90,7 @@
         subTitle: t('sys.exception.subTitle500'),
         btnText: backHomeI18n,
         handler: () => go(),
+        icon: notDataSvg,
       });
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_DATA, {

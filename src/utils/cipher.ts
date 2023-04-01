@@ -53,3 +53,7 @@ export function decodeByBase64(cipherText: string) {
 export function encryptByMd5(password: string) {
   return md5(password).toString();
 }
+
+export function md5Password(password) {
+  return md5(password + 'X-CODER').toString();
+}

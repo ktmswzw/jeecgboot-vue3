@@ -18,6 +18,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { saveOrUpdateUser, getUserRoles, getUserDepartList } from './user.api';
   import { useDrawerAdaptiveWidth } from '/@/hooks/jeecg/useAdaptiveWidth';
+  import {md5Password} from "/@/utils/cipher";
   // 声明Emits
   const emit = defineEmits(['success', 'register']);
   const attrs = useAttrs();
@@ -124,6 +125,8 @@
       values.userIdentity === 1 && (values.departIds = '');
       let isUpdateVal = unref(isUpdate);
       //提交表单
+      values.password = md5Password(values.password);
+      values.confirmpassword = md5Password(values.confirmpassword);
       await saveOrUpdateUser(values, isUpdateVal);
       //关闭弹窗
       closeDrawer();

@@ -44,7 +44,7 @@
   import { BasicTable, useTable, TableAction } from '/src/components/Table';
   import { useDrawer } from '/src/components/Drawer';
   import CategoryModal from './components/CategoryModal.vue';
-  import { useModal } from '/src/components/Modal';
+  import { useModal } from '/@/components/Modal';
   import { useMethods } from '/src/hooks/system/useMethods';
   import { columns, searchFormSchema } from './category.data';
   import { list, deleteCategory, batchDeleteCategory, getExportUrl, getImportUrl, getChildList, getChildListBatch } from './category.api';

@@ -10,6 +10,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import {md5Password} from "/@/utils/cipher";
   // 声明Emits
   const emit = defineEmits(['register']);
   const $message = useMessage();
@@ -57,6 +58,9 @@
       setModalProps({ confirmLoading: true });
       //提交表单
       let params = Object.assign({ username: unref(username) }, values);
+      params.oldpassword = md5Password(params.oldpassword);
+      params.password = md5Password(params.password);
+      params.confirmpassword = md5Password(params.confirmpassword);
       defHttp.put({ url: '/sys/user/updatePassword', params }, { isTransformResponse: false }).then((res) => {
         if (res.success) {
           $message.createMessage.success(res.message);

@@ -2,6 +2,7 @@ import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { dictItemCheck } from './dict.api';
 import { rules } from '/@/utils/helper/validator';
+import {getAllTenantList} from "/@/views/system/user/user.api";
 export const columns: BasicColumn[] = [
   {
     title: '字典名称',
@@ -76,6 +77,18 @@ export const formSchema: FormSchema[] = [
     dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_dict', 'dict_code', model, schema, true),
   },
   {
+    label: '租户',
+    field: 'tenantId',
+    component: 'ApiSelect',
+    componentProps: {
+      mode: 'multiple',
+      api: getAllTenantList,
+      numberToString: true,
+      labelField: 'name',
+      valueField: 'id',
+    },
+  },
+  {
     label: '描述',
     field: 'description',
     component: 'Input',
@@ -87,6 +100,11 @@ export const dictItemColumns: BasicColumn[] = [
     title: '名称',
     dataIndex: 'itemText',
     width: 80,
+  },
+  {
+    title: '企业',
+    dataIndex: 'tenantId',
+    width: 200,
   },
   {
     title: '描述',
@@ -162,6 +180,16 @@ export const itemFormSchema: FormSchema[] = [
           },
         },
       ];
+    },
+  },
+  {
+    field: 'tenantId',
+    component: 'JSearchSelect',
+    label: '请选择公司',
+    componentProps: {
+      dict: 'sys_tenant,name,id',
+      pageSize: 6,
+      async: true,
     },
   },
   {

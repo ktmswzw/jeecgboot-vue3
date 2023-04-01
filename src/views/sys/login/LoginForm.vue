@@ -64,6 +64,7 @@
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   // import { useDesign } from '/@/hooks/web/useDesign';
   import { getCodeInfo } from '/@/api/sys/user';
+  import {md5Password} from "/@/utils/cipher";
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col;
@@ -122,9 +123,10 @@
     if (!data) return;
     try {
       loading.value = true;
+      const pwd = md5Password(data.password);
       const { userInfo } = await userStore.login(
         toRaw({
-          password: data.password,
+          password: pwd,
           username: data.account,
           captchaVerification: captchaData.captchaVerification,
           // captcha: data.inputCode,

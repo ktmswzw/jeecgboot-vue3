@@ -15,7 +15,7 @@
   import { ref, unref } from 'vue';
   import { BasicDrawer, useDrawerInner } from '/src/components/Drawer';
   import { BasicTable, useTable, TableAction } from '/src/components/Table';
-  import { useModal } from '/src/components/Modal';
+  import { useModal } from '/@/components/Modal';
   import { useDesign } from '/@/hooks/web/useDesign';
   import DictItemModal from './DictItemModal.vue';
   import { dictItemColumns, dictItemSearchFormSchema } from '../dict.data';
