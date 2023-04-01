@@ -38,6 +38,10 @@
         <span v-if="!text" style="font-size: 12px; font-style: italic">无文件</span>
         <a-button v-else :ghost="true" type="primary" preIcon="ant-design:download-outlined" size="small" @click="downloadFile(text)">下载</a-button>
       </template>
+      <template #continuity="{ text }">
+        <a-tag color="#87d068" v-if="1">有效</a-tag>
+        <a-tag color="red" v-else>无效</a-tag>
+      </template>
     </BasicTable>
     <!--子表表格tab-->
     <a-tabs defaultActiveKey="1" style="padding: 0 10px">
@@ -73,6 +77,7 @@
       api: list,
       columns,
       canResize: false,
+      clickToRowSelect: true,
       rowSelection: { type: 'radio' },
       formConfig: {
         schemas: searchFormSchema,
@@ -87,6 +92,10 @@
         current: 1,
         pageSize: 5,
         pageSizeOptions: ['5', '10', '20'],
+      },
+      defSort: {
+        column: 'updateTime',
+        order: 'desc',
       },
     },
     exportConfig: {

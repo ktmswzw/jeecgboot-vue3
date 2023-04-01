@@ -30,8 +30,8 @@ enum Api {
   userQuitAgent = '/sys/user/userQuitAgent',
   getQuitList = '/sys/user/getQuitList',
   putCancelQuit = '/sys/user/putCancelQuit',
-  updateUserTenantStatus='/sys/tenant/updateUserTenantStatus',
-  getUserTenantPageList='/sys/tenant/getUserTenantPageList',
+  updateUserTenantStatus = '/sys/tenant/updateUserTenantStatus',
+  getUserTenantPageList = '/sys/tenant/getUserTenantPageList',
 }
 /**
  * 导出api
@@ -90,7 +90,7 @@ export const batchDeleteUser = (params, handleSuccess) => {
  * @param params
  */
 export const saveOrUpdateUser = (params, isUpdate) => {
-  let url = isUpdate ? Api.edit : Api.save;
+  const url = isUpdate ? Api.edit : Api.save;
   return defHttp.post({ url: url, params });
 };
 /**
@@ -175,7 +175,7 @@ export const getUserAgent = (params) => defHttp.get({ url: Api.getUserAgent, par
  * @param params
  */
 export const saveOrUpdateAgent = (params) => {
-  let url = params.id ? Api.agentEdit : Api.agentSave;
+  const url = params.id ? Api.agentEdit : Api.agentSave;
   return defHttp.post({ url: url, params });
 };
 
@@ -214,14 +214,22 @@ export const putCancelQuit = (params, handleSuccess) => {
 /**
  * 待审批获取列表数据
  */
-export const getUserTenantPageList = (params)=>{
-  return defHttp.get({url:Api.getUserTenantPageList,params})
-}
+export const getUserTenantPageList = (params) => {
+  return defHttp.get({ url: Api.getUserTenantPageList, params });
+};
 
 /**
  * 更新租户状态
  * @param params
  */
-export const updateUserTenantStatus = (params)=>{
-  return defHttp.put({ url: Api.updateUserTenantStatus, params }, { joinParamsToUrl: true,isTransformResponse: false });
-}
+export const updateUserTenantStatus = (params) => {
+  return defHttp.put({ url: Api.updateUserTenantStatus, params }, { joinParamsToUrl: true, isTransformResponse: false });
+};
+
+/**
+ * 推送ID
+ * @param params
+ */
+export const savePusherClientId = (params) => {
+  return defHttp.post({ url: Api.savePusherClientId, params });
+};

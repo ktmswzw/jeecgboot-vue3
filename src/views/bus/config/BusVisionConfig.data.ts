@@ -1,6 +1,5 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-import { rules } from '/@/utils/helper/validator';
 import { render } from '/@/utils/common/renderUtils';
 //列表数据
 export const columns: BasicColumn[] = [
@@ -28,11 +27,12 @@ export const columns: BasicColumn[] = [
     title: '开启状态',
     align: 'center',
     dataIndex: 'status',
+    slots: { customRender: 'continuity' },
   },
   {
     title: '区域',
     align: 'center',
-    dataIndex: 'area',
+    dataIndex: 'departName',
   },
   {
     title: '经度',
@@ -98,7 +98,7 @@ export const columns: BasicColumn[] = [
   {
     title: '企业ID',
     align: 'center',
-    dataIndex: 'tenantId_dictText',
+    dataIndex: 'tenantId',
   },
   {
     title: 'snap',
@@ -119,23 +119,29 @@ export const columns: BasicColumn[] = [
 //查询数据
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '企业ID',
+    label: '组织',
     field: 'tenantId',
     component: 'JDictSelectTag',
+    helpMessage: ['归属客户'],
     componentProps: {
       dictCode: 'sys_tenant,name,id',
     },
-    colProps: { span: 6 },
+    labelWidth: 50,
+  },
+  {
+    label: '名称',
+    field: 'sourceName',
+    component: 'JInput',
+    helpMessage: ['视频别名'],
+    colProps: { span: 3 },
   },
   {
     label: '区域',
     field: 'area',
     component: 'JSelectDept',
-    helpMessage: ['component模式'],
-    componentProps: { showButton: false, rowKey: 'orgCode', primaryKey: 'orgCode' },
-    colProps: {
-      span: 12,
-    },
+    helpMessage: ['摄像头所属区域'],
+    colProps: { span: 3 },
+    componentProps: { showButton: true, rowKey: 'orgCode', primaryKey: 'orgCode' },
   },
 ];
 
@@ -145,7 +151,7 @@ export const formSchema: FormSchema[] = [
     label: '视频别名',
     field: 'sourceName',
     component: 'Input',
-    dynamicRules: ({ model, schema }) => {
+    dynamicRules: () => {
       return [{ required: true, message: '请输入视频别名!' }];
     },
   },
@@ -172,16 +178,24 @@ export const formSchema: FormSchema[] = [
   {
     label: '区域',
     field: 'area',
-    component: 'Input',
-    dynamicRules: ({ model, schema }) => {
-      return [{ required: true, message: '请输入区域!' }];
+    component: 'JSelectDept',
+    componentProps: () => {
+      return {
+        sync: false,
+        multiple: false,
+        checkStrictly: true,
+        showButton: true,
+        rowKey: 'orgCode',
+        primaryKey: 'orgCode',
+        defaultExpandLevel: 2,
+      };
     },
   },
   {
     label: '经度',
     field: 'longitude',
-    component: 'Input',
-    dynamicRules: ({ model, schema }) => {
+    component: 'MapChoose',
+    dynamicRules: () => {
       return [{ required: true, message: '请输入经度!' }];
     },
   },
@@ -189,7 +203,7 @@ export const formSchema: FormSchema[] = [
     label: '纬度',
     field: 'latitude',
     component: 'Input',
-    dynamicRules: ({ model, schema }) => {
+    dynamicRules: () => {
       return [{ required: true, message: '请输入纬度!' }];
     },
   },

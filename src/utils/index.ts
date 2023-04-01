@@ -468,6 +468,7 @@ export function dataURLtoFile(dataurl, filename) {
 
 //定义一些常量
 const x_PI = 52.35987755982988;
+const PI = 3.1415926535897932384626;
 
 /**
  * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
@@ -484,6 +485,15 @@ export function bd09toGCJ02(bd_lon, bd_lat) {
   const gg_lng = z * Math.cos(theta);
   const gg_lat = z * Math.sin(theta);
   return [gg_lng, gg_lat];
+}
+
+export function gcj02tobd09(lng, lat) {
+  const x_PI = (PI * 3000.0) / 180.0;
+  const z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * x_PI);
+  const theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
+  const bd_lng = z * Math.cos(theta) + 0.0065;
+  const bd_lat = z * Math.sin(theta) + 0.006;
+  return [bd_lng, bd_lat];
 }
 
 export function FindMaxMinPoint(longitude, latitude, distance) {

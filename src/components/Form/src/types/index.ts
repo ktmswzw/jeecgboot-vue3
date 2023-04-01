@@ -151,4 +151,5 @@ export type ComponentType =
   | 'RangeNumber'
   | 'linkRecordSelect'
   | 'RangeTime'
+  | 'MapChoose'
   | 'JRangeNumber';
