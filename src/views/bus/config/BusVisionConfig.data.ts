@@ -186,6 +186,7 @@ export const formSchema: FormSchema[] = [
         checkStrictly: true,
         showButton: true,
         rowKey: 'orgCode',
+        rowLabel: 'orgName',
         primaryKey: 'orgCode',
         defaultExpandLevel: 2,
       };
@@ -195,6 +196,20 @@ export const formSchema: FormSchema[] = [
     label: '经度',
     field: 'longitude',
     component: 'MapChoose',
+    componentProps: ({ formModel }) => {
+      return {
+        center:
+          formModel.longitude != null && formModel.longitude != 'none'
+            ? { longitude: formModel.longitude, latitude: formModel.latitude }
+            : { longitude: '120.300319', latitude: '28.13513' },
+        onChange: (e: any) => {
+          formModel.longitude = e;
+        },
+        onChangeTwo: (e: any) => {
+          formModel.latitude = e;
+        },
+      };
+    },
     dynamicRules: () => {
       return [{ required: true, message: '请输入经度!' }];
     },
@@ -325,7 +340,24 @@ export const busVisionPrefabricatedFormSchema: FormSchema[] = [
   {
     label: '经度',
     field: 'longitude',
-    component: 'Input',
+    component: 'MapChoose',
+    componentProps: ({ formModel, schema, formActionType, tableAction }) => {
+      console.log(schema);
+      console.log(formActionType);
+      console.log(tableAction);
+      return {
+        center:
+          formModel.longitude != null && formModel.longitude != 'none'
+            ? { longitude: formModel.longitude, latitude: formModel.latitude }
+            : { longitude: '120.300319', latitude: '28.13513' },
+        onChange: (e: any) => {
+          formModel.longitude = e;
+        },
+        onChangeTwo: (e: any) => {
+          formModel.latitude = e;
+        },
+      };
+    },
   },
   {
     label: '纬度',

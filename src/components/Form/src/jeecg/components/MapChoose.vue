@@ -1,18 +1,17 @@
 <!--地图选择组件-->
 <template>
   <div>
-    <a-input placeholder="请选择" v-model:value="value" style="width: 85%; margin-bottom: 5px; margin-right: 5px;" @input="emitChange"/>
+    <a-input placeholder="请选择" v-model:value="center.longitude" style="width: 85%; margin-bottom: 5px; margin-right: 5px" @input="emitChange"/>
     <a-button type="primary" @click="handleOpen">地图</a-button>
-    <MapChooseModal @register="regModal" @getChooseResult="setValue" v-bind="emitChange" />
+    <MapChooseModal @register="regModal" @get-choose-result="setValue" v-model:center="center" />
   </div>
 </template>
 <script lang="ts">
   import MapChooseModal from './modal/MapChooseModal.vue';
-  import { defineComponent, ref, watchEffect, watch, provide } from 'vue';
+  import { defineComponent, provide, ref, watch, watchEffect } from 'vue';
   import { useModal } from '/@/components/Modal';
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { useAttrs } from '/@/hooks/core/useAttrs';
-  import { isEmpty } from '/@/utils/is';
 
   export default defineComponent({
     name: 'JSelectDept',
@@ -21,18 +20,18 @@
     },
     inheritAttrs: false,
     props: {
-      value: {
-        type: String,
-        default: '',
+      center: {
+        type: Object,
+        default: () => ({}),
       },
     },
-    emits: ['options-change', 'change', 'select', 'update:value'],
+    emits: ['change', 'changeTwo', 'updateClear'],
     setup(props, { emit }) {
       const emitData = ref<any[]>();
       //注册model
       const [regModal, { openModal }] = useModal();
       //表单值
-      const [state] = useRuleFormItem(props, 'value', 'change', emitData);
+      const [state] = useRuleFormItem(props, 'center', 'change', emitData);
       // 是否正在加载回显数据
       const loadingEcho = ref<boolean>(false);
       //下发 loadingEcho,xxxBiz组件接收
@@ -45,11 +44,11 @@
        * 监听组件值
        */
       watchEffect(() => {
-        props.value && initValue();
+        props && initValue();
       });
 
       watch(
-        () => props.value,
+        () => props,
         () => {
           initValue();
         }
@@ -69,10 +68,7 @@
        * 将字符串值转化为数组
        */
       function initValue() {
-        let value = props.value ? props.value : [];
-        if (value && typeof value === 'string') {
-          state.value = value;
-        }
+        state.center = props.center ? props.center : {};
       }
 
       /**
@@ -80,17 +76,19 @@
        */
       function setValue(values) {
         console.log(values);
-        emit('update:value', values);
+        emit('change', values[0]);
+        emit('changeTwo', values[1]);
       }
+
       function emitChange() {
-        emit('update:value', isEmpty(props.value) ? '' : props.value);
+        emit('updateClear', '');
       }
 
       return {
         state,
         attrs,
-        loadingEcho,
         emitChange,
+        loadingEcho,
         tag,
         regModal,
         setValue,

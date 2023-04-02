@@ -66,7 +66,6 @@
       let propValue = props.value === '' ? [] : props.value;
       const getBindValue = Object.assign({}, unref(props), unref(attrs), { value: propValue });
       //update-end-author:taoyan date:2022-10-28 for: 部门选择警告类型不匹配
-
       const queryUrl = getQueryUrl();
       const [{ visibleChange, checkedKeys, getCheckStrictly, getSelectTreeData, onCheck, onLoadData, treeData, checkALL, expandAll, onSelect }] =
         useTreeBiz(treeRef, queryUrl, getBindValue);

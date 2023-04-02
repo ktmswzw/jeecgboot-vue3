@@ -37,6 +37,7 @@
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { queryDepartTreeSync } from '/@/views/system/depart/depart.api';
   import { selectProps } from '/@/components/Form/src/jeecg/props/props';
+  import {getAllTenantList} from "/@/views/system/user/user.api";
   export default defineComponent({
     name: 'UserSelectByDepModal',
     components: {
@@ -115,6 +116,18 @@
               label: '账号',
               field: 'username',
               component: 'Input',
+            },
+            {
+              label: '租户',
+              field: 'relTenantIds',
+              component: 'ApiSelect',
+              componentProps: {
+                mode: 'multiple',
+                api: getAllTenantList,
+                numberToString: true,
+                labelField: 'name',
+                valueField: 'id',
+              },
             },
           ],
           resetFunc: customResetFunc,

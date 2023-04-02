@@ -5,14 +5,14 @@
       v-bind="$attrs"
       @register="register"
       :title="modalTitle"
-      width="900px"
+      :defaultFullscreen="true"
       wrapClassName="j-user-select-modal"
       @ok="handleOk"
       destroyOnClose
       @visible-change="visibleChange"
     >
       <div>
-        <div id="point">{{ resultPoint[0] + ',' + resultPoint[1] }}</div>
+        <div id="point" v-if="resultPoint[0]">{{ resultPoint[0] + ',' + resultPoint[1] }}</div>
         <div id="map"></div>
         <div id="overlay-box"></div>
       </div>
@@ -20,7 +20,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
+import {defineComponent, ref, reactive, watch} from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
 
   import 'ol/ol.css';
@@ -34,7 +34,7 @@
   import { transform } from 'ol/proj';
   import { Point } from 'ol/geom';
   import { Icon, Style } from 'ol/style';
-  import img from '/@/assets/svg/boat.svg';
+  import img from '/@/assets/svg/map-filling.svg';
 
   export default defineComponent({
     components: {
@@ -48,12 +48,15 @@
         default: '选择坐标',
       },
       center: {
-        type: Array,
-        default: () => [120.300319, 28.13513],
+        type: Object,
+        default: () => {
+          return { longitude: '120.300319', latitude: '28.13513'  };
+        },
       },
     },
     emits: ['register', 'getChooseResult'],
-    setup(props, { emit }) {
+    setup(props, context) {
+      let resultPoint = ref([]);
       const mapView = reactive({
         center: fromLonLat(bd09toGCJ02(props.center[0], props.center[1])), // 地图中心点
         zoom: 15, // 初始缩放级别
@@ -62,7 +65,6 @@
       });
       let map = ref(null);
       let pointLayer = ref({});
-      let resultPoint = ref([]);
       const mapUrl = ref('http://map.shunxvision.com:8181/zjls/tiles/{z}/{x}/{y}.jpg');
       //注册弹框
       const [register, { closeModal }] = useModalInner(() => {
@@ -72,23 +74,22 @@
               url: mapUrl.value,
             }),
           });
-          console.log('111111');
           map = new Map({
             layers: [tileLayer],
             view: new View(mapView),
             target: 'map',
           });
           map.on('click', (e) => {
-            console.log(e.coordinate);
             addPoints(e.coordinate);
           });
+          addPoints(mapView.center);
         }, 800);
       });
       /**
        * 确定选择
        */
       function handleOk() {
-        emit('getChooseResult', resultPoint.value);
+        context.emit('getChooseResult', resultPoint.value);
         closeModal();
       }
 
@@ -115,7 +116,7 @@
             // 设置图片效果
             image: new Icon({
               src: img,
-              // anchor: [0.5, 0.5],
+              anchor: [0.5, 1],
               scale: 0.8,
             }),
           })
@@ -141,6 +142,15 @@
         }
       }
 
+      watch(
+        () => props.center,
+        (val) => {
+          if (val) {
+            mapView.center = fromLonLat(bd09toGCJ02(parseFloat(val.longitude), parseFloat(val.latitude)));
+          }
+        },
+        { immediate: true }
+      );
       return {
         handleOk,
         register,
@@ -153,9 +163,11 @@
 
 <style scoped>
   #point {
-    top: 10px;
+    bottom: 10px;
     left: 40%;
-    color: #fff2f0;
+    font-weight: bold;
+    color: red;
+    -webkit-text-stroke: 1px #fffaea;
     z-index: 999;
     position: absolute;
   }

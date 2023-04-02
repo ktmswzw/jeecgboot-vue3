@@ -58,8 +58,8 @@
 </template>
 
 <script lang="ts" name="config-busVisionConfig" setup>
-  import { ref, computed, unref, provide } from 'vue';
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { computed, unref, provide } from 'vue';
+  import { BasicTable, TableAction } from '/@/components/Table';
   import { useListPage } from '/@/hooks/system/useListPage';
   import { useModal } from '/@/components/Modal';
   import BusVisionConfigModal from './components/BusVisionConfigModal.vue';
@@ -68,8 +68,14 @@
   import { columns, searchFormSchema } from './BusVisionConfig.data';
   import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from './BusVisionConfig.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
+  import { getAreaTextByCode } from '/@/components/Form/src/utils/Area';
   //注册model
   const [registerModal, { openModal }] = useModal();
+
+  function onSelectChange(selectedRowKeys: (string | number)[], selectedRows: any[]) {
+    console.log('checkedKeys------>', selectedRowKeys);
+    console.log('selectedRows------>', selectedRows);
+  }
   //注册table数据
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
     tableProps: {
@@ -78,7 +84,7 @@
       columns,
       canResize: false,
       clickToRowSelect: true,
-      rowSelection: { type: 'radio' },
+      rowSelection: { type: 'radio', onChange: onSelectChange },
       formConfig: {
         schemas: searchFormSchema,
         fieldMapToNumber: [],
@@ -108,11 +114,13 @@
     },
   });
 
-  const [registerTable, { reload }, { rowSelection, selectedRowKeys }] = tableContext;
+  const [registerTable, { reload }, { rowSelection, selectedRowKeys, selectedRows }] = tableContext;
 
   const mainId = computed(() => (unref(selectedRowKeys).length > 0 ? unref(selectedRowKeys)[0] : ''));
+  const row = computed(() => (unref(selectedRows).length > 0 ? unref(selectedRows)[0] : ''));
   //下发 mainId,子组件接收
   provide('mainId', mainId);
+  provide('row', row);
   /**
    * 新增事件
    */

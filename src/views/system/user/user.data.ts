@@ -40,7 +40,7 @@ export const columns: BasicColumn[] = [
     width: 100,
   },
   {
-    title: '部门',
+    title: '部门1',
     width: 150,
     dataIndex: 'orgCodeTxt',
   },
@@ -169,9 +169,9 @@ export const formSchema: FormSchema[] = [
   {
     label: '工号',
     field: 'workNo',
-    required: true,
+    required: false,
     component: 'Input',
-    dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_user', 'work_no', model, schema, true),
+    dynamicRules: ({ model, schema }) => rules.duplicateCheckRule('sys_user', 'work_no', model, schema, false),
   },
   {
     label: '职务',
