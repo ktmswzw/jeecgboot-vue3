@@ -1,6 +1,8 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { render } from '/@/utils/common/renderUtils';
+import { useBusStore } from '/@/store/modules/bus';
+import {unref} from "vue";
 //列表数据
 export const columns: BasicColumn[] = [
   {
@@ -341,15 +343,23 @@ export const busVisionPrefabricatedFormSchema: FormSchema[] = [
     label: '经度',
     field: 'longitude',
     component: 'MapChoose',
-    componentProps: ({ formModel, schema, formActionType, tableAction }) => {
-      console.log(schema);
-      console.log(formActionType);
-      console.log(tableAction);
+    componentProps: ({ formModel }) => {
+      const busStore = useBusStore();
+      const bean = { longitude: '', latitude: '' };
+      const rowBean = busStore.getLocalBean;
+      if (formModel.longitud == undefined) {
+        bean.longitude = rowBean.longitude;
+        bean.latitude = rowBean.latitude;
+      } else {
+        bean.longitude = formModel.longitude;
+        bean.latitude = formModel.latitude;
+      }
+      if (rowBean.longitude == undefined) {
+        bean.longitude = '120.300319';
+        bean.latitude = '28.13513';
+      }
       return {
-        center:
-          formModel.longitude != null && formModel.longitude != 'none'
-            ? { longitude: formModel.longitude, latitude: formModel.latitude }
-            : { longitude: '120.300319', latitude: '28.13513' },
+        center: bean,
         onChange: (e: any) => {
           formModel.longitude = e;
         },

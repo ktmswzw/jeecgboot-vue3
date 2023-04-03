@@ -69,12 +69,16 @@
   import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from './BusVisionConfig.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import { getAreaTextByCode } from '/@/components/Form/src/utils/Area';
+  import { useBusStore } from '/@/store/modules/bus';
+
   //注册model
   const [registerModal, { openModal }] = useModal();
-
+  const busStore = useBusStore();
   function onSelectChange(selectedRowKeys: (string | number)[], selectedRows: any[]) {
-    console.log('checkedKeys------>', selectedRowKeys);
-    console.log('selectedRows------>', selectedRows);
+    // console.log('checkedKeys------>', selectedRowKeys);
+    // console.log('selectedRows------>', selectedRows);
+    // 将选中的数据保存到state中
+    busStore.setLocalBean(selectedRows[0]);
   }
   //注册table数据
   const { prefixCls, tableContext, onExportXls, onImportXls } = useListPage({
